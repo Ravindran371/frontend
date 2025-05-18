@@ -37,12 +37,15 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer" onClick={handleClick}>
+    <Card 
+      className="overflow-hidden transition-all duration-300 cursor-pointer group hover:shadow-xl hover:transform hover:scale-[1.02]" 
+      onClick={handleClick}
+    >
       <div className="relative">
         <img 
           src={property.image} 
           alt={property.title} 
-          className="h-64 w-full object-cover"
+          className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         {property.featured && (
           <div className="absolute top-4 left-4 bg-blue-600 text-white px-2 py-1 text-xs rounded">
@@ -50,12 +53,12 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
           </div>
         )}
         <div 
-          className="absolute top-4 right-4 bg-white rounded-full p-2 cursor-pointer"
+          className="absolute top-4 right-4 bg-white rounded-full p-2 cursor-pointer hover:bg-gray-100 transition-colors z-10"
           onClick={handleLikeClick}
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
-            className={`h-5 w-5 ${liked ? 'text-red-500 fill-red-500' : 'text-gray-500'}`}
+            className={`h-5 w-5 ${liked ? 'text-red-500 fill-red-500' : 'text-gray-500'} transition-colors`}
             fill="none" 
             viewBox="0 0 24 24" 
             stroke="currentColor"
@@ -64,8 +67,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
           </svg>
         </div>
       </div>
-      <CardContent className="pt-4">
-        <h3 className="text-lg font-bold text-gray-800 mb-2">{property.title}</h3>
+      <CardContent className="pt-4 group-hover:bg-gray-50 transition-colors">
+        <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">{property.title}</h3>
         <p className="text-gray-600 text-sm mb-3 flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
