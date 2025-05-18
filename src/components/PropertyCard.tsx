@@ -1,6 +1,7 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 
 interface Property {
   id: number;
@@ -23,8 +24,20 @@ interface PropertyCardProps {
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
+  const [liked, setLiked] = useState(false);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/properties/${property.id}`);
+  };
+
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLiked(!liked);
+  };
+
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer" onClick={handleClick}>
       <div className="relative">
         <img 
           src={property.image} 
@@ -36,9 +49,18 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
             Featured
           </div>
         )}
-        <div className="absolute top-4 right-4 bg-white rounded-full p-2">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        <div 
+          className="absolute top-4 right-4 bg-white rounded-full p-2 cursor-pointer"
+          onClick={handleLikeClick}
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className={`h-5 w-5 ${liked ? 'text-red-500 fill-red-500' : 'text-gray-500'}`}
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={liked ? 0 : 2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
           </svg>
         </div>
       </div>

@@ -1,6 +1,7 @@
 
 import React from "react";
 import SearchBar from "./SearchBar";
+import Navigation from "./Navigation";
 
 const Hero: React.FC = () => {
   return (
@@ -14,8 +15,12 @@ const Hero: React.FC = () => {
       >
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-black/30"></div>
       </div>
+      <Navigation />
       <div className="relative h-full flex items-center justify-center">
         <div className="w-full max-w-6xl px-4">
+          <h1 className="text-white text-3xl md:text-4xl font-bold mb-4 text-center">
+            Find Your Dream Home
+          </h1>
           <SearchBar />
         </div>
       </div>

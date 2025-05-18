@@ -1,8 +1,18 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 
 const SearchBar: React.FC = () => {
+  const [searchType, setSearchType] = useState("buy");
+
   return (
     <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -10,43 +20,67 @@ const SearchBar: React.FC = () => {
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Looking for
           </label>
-          <select className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option>Buy</option>
-            <option>Rent</option>
-            <option>Sell</option>
-          </select>
+          <Select defaultValue="buy" onValueChange={(value) => setSearchType(value)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="buy">Buy</SelectItem>
+              <SelectItem value="rent">Rent</SelectItem>
+              <SelectItem value="sell">Sell</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div className="col-span-1 md:col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Location
           </label>
-          <input
+          <Input
             type="text"
             placeholder="City, Neighborhood"
-            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full"
           />
         </div>
         <div className="col-span-1 md:col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Property Type
           </label>
-          <select className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option>Any</option>
-            <option>House</option>
-            <option>Apartment</option>
-            <option>Villa</option>
-          </select>
+          <Select defaultValue="any">
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="any">Any</SelectItem>
+              <SelectItem value="house">House</SelectItem>
+              <SelectItem value="apartment">Apartment</SelectItem>
+              <SelectItem value="villa">Villa</SelectItem>
+              <SelectItem value="plot">Plot</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div className="col-span-1 md:col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Budget
           </label>
-          <select className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option>Any</option>
-            <option>$100k - $200k</option>
-            <option>$200k - $500k</option>
-            <option>$500k+</option>
-          </select>
+          {searchType === "sell" ? (
+            <Input 
+              type="text"
+              placeholder="Enter your budget"
+              className="w-full"
+            />
+          ) : (
+            <Select defaultValue="any">
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select budget" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="any">Any</SelectItem>
+                <SelectItem value="100k-200k">$100k - $200k</SelectItem>
+                <SelectItem value="200k-500k">$200k - $500k</SelectItem>
+                <SelectItem value="500k+">$500k+</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
         </div>
       </div>
       <div className="mt-4 flex justify-center">
