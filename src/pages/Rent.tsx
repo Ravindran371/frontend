@@ -111,8 +111,8 @@ const Rent: React.FC = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="any">Any</SelectItem>
-                      <SelectItem value="short">Short-term (< 6 months)</SelectItem>
-                      <SelectItem value="long">Long-term (> 6 months)</SelectItem>
+                      <SelectItem value="short">Short-term (&lt; 6 months)</SelectItem>
+                      <SelectItem value="long">Long-term (&gt; 6 months)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

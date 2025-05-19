@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -12,11 +13,17 @@ import {
 
 const SearchBar: React.FC = () => {
   const [searchType, setSearchType] = useState("buy");
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    // Navigate to the appropriate page based on search type
+    navigate(`/${searchType}`);
+  };
 
   return (
     <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-4 md:p-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="col-span-1 md:col-span-1">
+      <div className="flex flex-col md:flex-row gap-4 items-end">
+        <div className="flex-1 md:flex-none md:w-1/4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Looking for
           </label>
@@ -31,7 +38,8 @@ const SearchBar: React.FC = () => {
             </SelectContent>
           </Select>
         </div>
-        <div className="col-span-1 md:col-span-1">
+        
+        <div className="flex-1 md:flex-none md:w-1/4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Location
           </label>
@@ -41,7 +49,8 @@ const SearchBar: React.FC = () => {
             className="w-full bg-transparent border border-gray-300"
           />
         </div>
-        <div className="col-span-1 md:col-span-1">
+        
+        <div className="flex-1 md:flex-none md:w-1/4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Property Type
           </label>
@@ -58,35 +67,15 @@ const SearchBar: React.FC = () => {
             </SelectContent>
           </Select>
         </div>
-        <div className="col-span-1 md:col-span-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Budget
-          </label>
-          {searchType === "sell" ? (
-            <Input 
-              type="text"
-              placeholder="Enter your budget"
-              className="w-full bg-transparent border border-gray-300"
-            />
-          ) : (
-            <Select defaultValue="any">
-              <SelectTrigger className="w-full bg-transparent border border-gray-300">
-                <SelectValue placeholder="Select budget" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="any">Any</SelectItem>
-                <SelectItem value="100k-200k">$100k - $200k</SelectItem>
-                <SelectItem value="200k-500k">$200k - $500k</SelectItem>
-                <SelectItem value="500k+">$500k+</SelectItem>
-              </SelectContent>
-            </Select>
-          )}
+        
+        <div className="flex-1 md:flex-none md:w-1/4">
+          <Button 
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white px-8 py-2 rounded-md"
+            onClick={handleSearch}
+          >
+            Search
+          </Button>
         </div>
-      </div>
-      <div className="mt-4 flex justify-center">
-        <Button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-2 rounded-md">
-          Search
-        </Button>
       </div>
     </div>
   );
