@@ -14,14 +14,14 @@ const SearchBar: React.FC = () => {
   const [searchType, setSearchType] = useState("buy");
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
+    <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-4 md:p-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="col-span-1 md:col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Looking for
           </label>
           <Select defaultValue="buy" onValueChange={(value) => setSearchType(value)}>
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full bg-transparent border border-gray-300">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
@@ -38,7 +38,7 @@ const SearchBar: React.FC = () => {
           <Input
             type="text"
             placeholder="City, Neighborhood"
-            className="w-full"
+            className="w-full bg-transparent border border-gray-300"
           />
         </div>
         <div className="col-span-1 md:col-span-1">
@@ -46,7 +46,7 @@ const SearchBar: React.FC = () => {
             Property Type
           </label>
           <Select defaultValue="any">
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full bg-transparent border border-gray-300">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
@@ -66,11 +66,11 @@ const SearchBar: React.FC = () => {
             <Input 
               type="text"
               placeholder="Enter your budget"
-              className="w-full"
+              className="w-full bg-transparent border border-gray-300"
             />
           ) : (
             <Select defaultValue="any">
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full bg-transparent border border-gray-300">
                 <SelectValue placeholder="Select budget" />
               </SelectTrigger>
               <SelectContent>
