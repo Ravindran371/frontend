@@ -21,14 +21,14 @@ const SearchBar: React.FC = () => {
   };
 
   return (
-    <div className="bg-white/30 backdrop-blur-sm rounded-lg shadow-lg p-4 md:p-6">
+    <div className="bg-transparent backdrop-blur-sm rounded-lg shadow-lg p-4 md:p-6">
       <div className="flex flex-col md:flex-row gap-4 items-end">
         <div className="flex-1 md:flex-none md:w-1/4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-white mb-1">
             Looking for
           </label>
           <Select defaultValue="buy" onValueChange={(value) => setSearchType(value)}>
-            <SelectTrigger className="w-full bg-transparent border border-gray-300">
+            <SelectTrigger className="w-full bg-transparent border border-white/50 text-white">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
@@ -40,22 +40,22 @@ const SearchBar: React.FC = () => {
         </div>
         
         <div className="flex-1 md:flex-none md:w-1/4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-white mb-1">
             Location
           </label>
           <Input
             type="text"
             placeholder="City, Neighborhood"
-            className="w-full bg-transparent border border-gray-300"
+            className="w-full bg-transparent border border-white/50 text-white placeholder:text-white/70"
           />
         </div>
         
         <div className="flex-1 md:flex-none md:w-1/4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-white mb-1">
             Property Type
           </label>
           <Select defaultValue="any">
-            <SelectTrigger className="w-full bg-transparent border border-gray-300">
+            <SelectTrigger className="w-full bg-transparent border border-white/50 text-white">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
