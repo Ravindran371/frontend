@@ -21,8 +21,8 @@ const SearchBar: React.FC = () => {
   };
 
   return (
-    <div className="bg-transparent backdrop-blur-sm rounded-lg shadow-lg p-4 md:p-6">
-      <div className="flex flex-col md:flex-row gap-4 items-end">
+    <div className="bg-transparent backdrop-blur-sm rounded-lg shadow-lg p-3">
+      <div className="flex flex-col md:flex-row gap-2 items-end">
         <div className="flex-1 md:flex-none md:w-1/4">
           <label className="block text-sm font-medium text-white mb-1">
             Looking for
@@ -70,7 +70,7 @@ const SearchBar: React.FC = () => {
         
         <div className="md:w-auto">
           <Button 
-            className="w-full md:w-auto bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-md"
+            className="w-full md:w-auto bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md"
             onClick={handleSearch}
           >
             Search

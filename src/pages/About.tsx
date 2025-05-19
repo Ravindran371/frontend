@@ -1,9 +1,15 @@
-
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 
 const About: React.FC = () => {
+  const navigate = useNavigate();
+  
+  const handleContactClick = () => {
+    navigate('/contact');
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="relative h-[300px] w-full">
@@ -113,7 +119,9 @@ const About: React.FC = () => {
               <p className="text-gray-600 mb-6">
                 Whether you're looking to invest in a piece of Franco-Pondicherrian history or seeking a new home that bridges two beautiful cultures, we invite you to be part of our continuing story.
               </p>
-              <button className="bg-orange-500 hover:bg-orange-600 text-white py-3 px-8 rounded-md font-medium">
+              <button 
+                onClick={handleContactClick}
+                className="bg-orange-500 hover:bg-orange-600 text-white py-3 px-8 rounded-md font-medium">
                 Contact Us Today
               </button>
             </div>

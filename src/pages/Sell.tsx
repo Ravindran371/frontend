@@ -16,7 +16,7 @@ const Sell: React.FC = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1496568816309-51d7c20e3b21?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')",
+              "url('https://images.unsplash.com/photo-1459767129954-1b1c1f9b9ace?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')",
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/40"></div>

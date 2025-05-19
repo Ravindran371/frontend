@@ -8,7 +8,7 @@ const Hero: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="relative h-[600px] w-full">
+    <div className="relative h-screen w-full">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -24,7 +24,7 @@ const Hero: React.FC = () => {
           <h1 className="text-white text-4xl md:text-5xl font-bold mb-2 text-center">
             Find Your Dream Home
           </h1>
-          <h2 className="text-white text-xl md:text-2xl font-light mb-8 text-center">
+          <h2 className="text-white text-xl md:text-2xl font-light mb-6 text-center">
             Discover the Perfect Blend of French & Indian Architecture
           </h2>
           <SearchBar />

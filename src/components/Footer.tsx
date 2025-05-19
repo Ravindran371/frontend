@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -110,12 +109,7 @@ const Footer: React.FC = () => {
         
         <div className="flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
           <div className="mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} Real Estate Website. All rights reserved.
-          </div>
-          <div className="flex space-x-4">
-            <Link to="#" className="hover:text-orange-400 transition-colors">Privacy Policy</Link>
-            <Link to="#" className="hover:text-orange-400 transition-colors">Terms of Service</Link>
-            <Link to="#" className="hover:text-orange-400 transition-colors">Sitemap</Link>
+            &copy; {new Date().getFullYear()} Pondy Website. All rights reserved.
           </div>
         </div>
       </div>
