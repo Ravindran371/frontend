@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import Navigation from "./Navigation";
+import { ChevronDown } from "lucide-react";
 
 const Hero: React.FC = () => {
   const navigate = useNavigate();
@@ -11,11 +12,11 @@ const Hero: React.FC = () => {
 
   // Array of hero images
   const heroImages = [
-    "https://images.unsplash.com/photo-1499856871958-5b9357976b82?ixlib=rb-1.2.1&auto=format&fit=crop&w=2070&q=80", // Eiffel Tower
-    "https://images.unsplash.com/photo-1573455494060-c5595004fb6c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80", // Nice French street
-    "https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80", // French mansion
-    "https://images.unsplash.com/photo-1551634979-2b11f8c946fe?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80", // French countryside
-    "/lovable-uploads/0e7fe6d9-ab7d-4d38-9565-7439b5439b5d.png" // Your uploaded image
+    "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-1.2.1&auto=format&fit=crop&w=2070&q=80",
+    "https://images.unsplash.com/photo-1466442929976-97f336a657be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
+    "https://images.unsplash.com/photo-1524230572899-a752b3835840?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
+    "https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
+    "/lovable-uploads/0e7fe6d9-ab7d-4d38-9565-7439b5439b5d.png"
   ];
 
   // Image carousel effect
@@ -41,6 +42,13 @@ const Hero: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const scrollToContent = () => {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <div className="relative h-screen w-full">
       {heroImages.map((image, index) => (
@@ -64,6 +72,16 @@ const Hero: React.FC = () => {
             Discover the Perfect Blend of French & Indian Architecture
           </h2>
           <SearchBar />
+          
+          {showScrollIndicator && (
+            <div 
+              className="absolute bottom-10 flex flex-col items-center cursor-pointer animate-bounce"
+              onClick={scrollToContent}
+            >
+              <span className="text-white text-sm mb-2">Scroll Down</span>
+              <ChevronDown className="text-white h-6 w-6" />
+            </div>
+          )}
         </div>
       </div>
     </div>

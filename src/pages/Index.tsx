@@ -9,7 +9,7 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import Footer from "@/components/Footer";
 
 const Index: React.FC = () => {
-  // Function to handle scroll animations with improved effect
+  // Function to handle scroll animations
   useEffect(() => {
     const handleScrollAnimation = () => {
       const reveals = document.querySelectorAll('.reveal');
