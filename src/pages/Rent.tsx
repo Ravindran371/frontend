@@ -1,11 +1,10 @@
-
 import React from "react";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Search, Building, MapPin, Cash } from "lucide-react";
+import { Search, Building, MapPin, indian-rupee as IndianRupee } from "lucide-react";
 
 const Rent: React.FC = () => {
   return (
@@ -152,7 +151,7 @@ const Rent: React.FC = () => {
               
               <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
                 <div className="bg-orange-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                  <Cash className="h-6 w-6 text-orange-500" />
+                  <IndianRupee className="h-6 w-6 text-orange-500" />
                 </div>
                 <h3 className="font-semibold mb-2">Affordable Luxury</h3>
                 <p className="text-gray-600 text-sm">
