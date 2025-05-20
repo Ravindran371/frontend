@@ -134,3 +134,115 @@ html {
 .btn-primary {
   @apply bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded transition duration-300;
 }
+
+/* Enhanced animations */
+@keyframes slideInFromBottom {
+  0% { 
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  0% { 
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  100% { 
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  0% { 
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  100% { 
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  0% { 
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Animation classes */
+.animate-fade-in {
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.animate-slide-up {
+  animation: slideInFromBottom 0.8s ease forwards;
+}
+
+.animate-slide-left {
+  animation: slideInFromLeft 0.8s ease forwards;
+}
+
+.animate-slide-right {
+  animation: slideInFromRight 0.8s ease forwards;
+}
+
+.animate-zoom-in {
+  animation: zoomIn 0.8s ease forwards;
+}
+
+/* Animation delays */
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-400 {
+  animation-delay: 400ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+/* Scroll animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Image transition effect */
+.image-fade {
+  transition: opacity 1s ease-in-out;
+}
+
+.image-zoom {
+  transition: transform 0.5s ease;
+}
+
+.image-zoom:hover {
+  transform: scale(1.05);
+}
