@@ -1,10 +1,11 @@
 import React from "react";
+import { IndianRupee } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Building, MapPin, indian-rupee as IndianRupee } from "lucide-react";
+import { Building, MapPin } from "lucide-react";
 
 const Buy: React.FC = () => {
   return (
