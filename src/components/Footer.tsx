@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,7 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-2xl font-bold mb-6 text-orange-400">About Us</h3>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              We are a leading real estate agency specializing in helping clients buy, sell, and rent properties in the most desirable neighborhoods.
+              We are a leading real estate agency specializing in helping clients buy, sell, and rent properties in the most desirable neighborhoods of Pondicherry with French-Indian heritage.
             </p>
             <div className="flex space-x-4">
               <Link to="#" className="bg-gray-700 hover:bg-orange-500 p-2 rounded-full transition-all duration-300 transform hover:scale-110">
@@ -58,12 +59,6 @@ const Footer: React.FC = () => {
                   Contact
                 </Link>
               </li>
-              <li>
-                <Link to="/" className="text-gray-300 hover:text-orange-400 transition-colors duration-300 flex items-center group">
-                  <span className="mr-2 transition-transform duration-300 group-hover:translate-x-1">›</span>
-                  Blog
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -72,26 +67,26 @@ const Footer: React.FC = () => {
             <div className="space-y-4">
               <p className="flex items-start text-gray-300 hover:text-white transition-colors">
                 <MapPin className="h-5 w-5 mr-3 text-orange-400 flex-shrink-0 mt-1" />
-                <span>123 Property Street, Suite 101<br />New York, NY 10001</span>
+                <span>123 French Quarter<br />Pondicherry, 605001</span>
               </p>
               <p className="flex items-center text-gray-300 hover:text-white transition-colors">
                 <Phone className="h-5 w-5 mr-3 text-orange-400 flex-shrink-0" />
-                <span>+1 (555) 123-4567</span>
+                <span>+91 (444) 123-4567</span>
               </p>
-              <Link to="mailto:info@realestate.com" className="flex items-center text-gray-300 hover:text-white transition-colors">
+              <Link to="mailto:info@pondyrealty.com" className="flex items-center text-gray-300 hover:text-white transition-colors">
                 <Mail className="h-5 w-5 mr-3 text-orange-400 flex-shrink-0" />
-                <span>info@realestate.com</span>
+                <span>info@pondyrealty.com</span>
               </Link>
-              <Link to="https://www.realestate.com" target="_blank" className="flex items-center text-gray-300 hover:text-white transition-colors">
+              <Link to="https://www.pondyrealty.com" target="_blank" className="flex items-center text-gray-300 hover:text-white transition-colors">
                 <Globe className="h-5 w-5 mr-3 text-orange-400 flex-shrink-0" />
-                <span>www.realestate.com</span>
+                <span>www.pondyrealty.com</span>
               </Link>
             </div>
           </div>
 
           <div>
             <h3 className="text-2xl font-bold mb-6 text-orange-400">Newsletter</h3>
-            <p className="text-gray-300 mb-4">Subscribe to our newsletter for the latest property updates.</p>
+            <p className="text-gray-300 mb-4">Subscribe to our newsletter for the latest property updates in Pondicherry.</p>
             <div className="space-y-3">
               <Input
                 type="email"

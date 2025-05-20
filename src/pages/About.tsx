@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
@@ -55,7 +56,7 @@ const About: React.FC = () => {
               </div>
               <div className="rounded-lg overflow-hidden shadow-lg">
                 <img 
-                  src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80" 
+                  src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80" 
                   alt="French Quarter in Pondicherry" 
                   className="w-full h-auto"
                 />
@@ -65,8 +66,8 @@ const About: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16">
               <div className="order-2 md:order-1 rounded-lg overflow-hidden shadow-lg">
                 <img 
-                  src="https://images.unsplash.com/photo-1546636889-ba9fdd63583e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80" 
-                  alt="French architecture" 
+                  src="https://images.unsplash.com/photo-1466442929976-97f336a657be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80" 
+                  alt="Pondicherry architecture" 
                   className="w-full h-auto"
                 />
               </div>
@@ -121,7 +122,7 @@ const About: React.FC = () => {
               </p>
               <button 
                 onClick={handleContactClick}
-                className="bg-orange-500 hover:bg-orange-600 text-white py-3 px-8 rounded-md font-medium">
+                className="bg-orange-500 hover:bg-orange-600 text-white py-3 px-8 rounded-md font-medium transition-all duration-300 transform hover:scale-105">
                 Contact Us Today
               </button>
             </div>
