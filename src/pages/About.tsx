@@ -56,7 +56,7 @@ const About: React.FC = () => {
               </div>
               <div className="rounded-lg overflow-hidden shadow-lg">
                 <img 
-                  src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80" 
+                  src="https://images.unsplash.com/photo-1590462271794-0a21594e84d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80" 
                   alt="French Quarter in Pondicherry" 
                   className="w-full h-auto"
                 />
@@ -66,7 +66,7 @@ const About: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16">
               <div className="order-2 md:order-1 rounded-lg overflow-hidden shadow-lg">
                 <img 
-                  src="https://images.unsplash.com/photo-1466442929976-97f336a657be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80" 
+                  src="https://images.unsplash.com/photo-1594568284297-7c64464062b1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80" 
                   alt="Pondicherry architecture" 
                   className="w-full h-auto"
                 />
