@@ -7,13 +7,10 @@ import { ChevronDown } from "lucide-react";
 
 const Hero: React.FC = () => {
   const navigate = useNavigate();
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
-  // Array with only Eiffel Tower image as requested
-  const heroImages = [
-    "/lovable-uploads/0e7fe6d9-ab7d-4d38-9565-7439b5439b5d.png"
-  ];
+  // Single Eiffel Tower image
+  const heroImage = "/lovable-uploads/0e7fe6d9-ab7d-4d38-9565-7439b5439b5d.png";
 
   // Handle scroll to hide indicator
   useEffect(() => {
@@ -41,7 +38,7 @@ const Hero: React.FC = () => {
       {/* Single Eiffel Tower background image */}
       <div
         className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out opacity-100"
-        style={{ backgroundImage: `url('${heroImages[0]}')` }}
+        style={{ backgroundImage: `url('${heroImage}')` }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50"></div>
       </div>
