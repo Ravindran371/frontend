@@ -32,11 +32,11 @@ const Hero: React.FC = () => {
 
   return (
     <div className="relative h-screen w-full">
-      {/* Eiffel Tower background image */}
+      {/* Eiffel Tower background image - using a different image URL */}
       <div
         className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out opacity-100"
         style={{ 
-          backgroundImage: "url('/lovable-uploads/0e7fe6d9-ab7d-4d38-9565-7439b5439b5d.png')",
+          backgroundImage: "url('https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80')",
           backgroundSize: "cover",
           backgroundPosition: "center"
         }}
