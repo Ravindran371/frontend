@@ -9,7 +9,7 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import Footer from "@/components/Footer";
 
 const Index: React.FC = () => {
-  // Function to handle scroll animations
+  // Function to handle improved scroll animations
   useEffect(() => {
     const handleScrollAnimation = () => {
       const reveals = document.querySelectorAll('.reveal');
@@ -36,31 +36,31 @@ const Index: React.FC = () => {
     <div className="flex flex-col min-h-screen">
       <Hero />
       
-      <div className="reveal">
+      <div className="reveal section-transition">
         <PropertySection title="Featured Properties" subtitle="Handpicked heritage properties by our team." type="featured" />
       </div>
       
-      <div className="reveal">
+      <div className="reveal section-transition">
         <CallToAction />
       </div>
       
-      <div className="reveal">
-        <PropertySection title="For Sale" subtitle="Explore our French colonial properties for sale." type="sale" />
+      <div className="reveal section-transition">
+        <PropertySection title="For Sale" subtitle="Explore our exquisite properties for sale." type="sale" />
       </div>
       
-      <div className="reveal">
-        <PropertySection title="For Rent" subtitle="Experience living in iconic Pondicherry architecture." type="rent" />
+      <div className="reveal section-transition">
+        <PropertySection title="For Rent" subtitle="Experience living in iconic architecture." type="rent" />
       </div>
       
-      <div className="reveal">
+      <div className="reveal section-transition">
         <ServicesSection />
       </div>
       
-      <div className="reveal">
+      <div className="reveal section-transition">
         <AgentsSection />
       </div>
       
-      <div className="reveal">
+      <div className="reveal section-transition">
         <TestimonialsSection />
       </div>
       

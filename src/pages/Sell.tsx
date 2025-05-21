@@ -2,7 +2,6 @@
 import React from "react";
 import Footer from "@/components/Footer";
 import SellPageHeader from "@/components/sell/SellPageHeader";
-import SellerBenefits from "@/components/sell/SellerBenefits";
 import PropertyForm from "@/components/sell/PropertyForm";
 import { Card, CardContent } from "@/components/ui/card";
 import { IndianRupee, Clock, TrendingUp, Building } from "lucide-react";
@@ -31,16 +30,37 @@ const Sell: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <SellPageHeader />
+      {/* Custom SellPageHeader with a selling-related background image */}
+      <div className="relative h-[400px] w-full">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80')",
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/40"></div>
+        </div>
+        <div className="relative h-full flex items-center justify-center">
+          <div className="w-full max-w-6xl px-4 text-center">
+            <h1 className="text-white text-4xl md:text-5xl font-bold mb-4 animate-fade-in">
+              Sell Your Property
+            </h1>
+            <p className="text-white text-xl max-w-3xl mx-auto animate-slide-up delay-200">
+              Get the best value for your property with our expert team
+            </p>
+          </div>
+        </div>
+      </div>
 
       <div className="bg-gradient-to-b from-gray-50 to-white py-16">
         <div className="container mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-xl p-8 max-w-4xl mx-auto -mt-20 relative z-10 mb-16">
+          <div className="bg-white rounded-xl shadow-xl p-8 max-w-4xl mx-auto -mt-20 relative z-10 mb-16 hover-shadow-effect">
             <h2 className="text-3xl font-bold mb-4 text-gray-800 text-center">Why Sell With Us?</h2>
-            <p className="text-center text-gray-600 mb-10">We specialize in marketing Pondicherry's unique Franco-Indian properties</p>
+            <p className="text-center text-gray-600 mb-10">We specialize in marketing unique heritage properties</p>
             
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow text-center">
+              <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow text-center card-hover">
                 <div className="bg-orange-100 rounded-full w-16 h-16 flex items-center justify-center mb-4 mx-auto">
                   <IndianRupee className="h-8 w-8 text-orange-500" />
                 </div>
@@ -50,33 +70,33 @@ const Sell: React.FC = () => {
                 </p>
               </div>
               
-              <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow text-center">
+              <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow text-center card-hover">
                 <div className="bg-orange-100 rounded-full w-16 h-16 flex items-center justify-center mb-4 mx-auto">
                   <Clock className="h-8 w-8 text-orange-500" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Quick Sale</h3>
                 <p className="text-sm text-gray-600">
-                  Our network of qualified buyers looking specifically for Pondicherry properties ensures faster sales.
+                  Our network of qualified buyers looking specifically for heritage properties ensures faster sales.
                 </p>
               </div>
               
-              <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow text-center">
+              <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow text-center card-hover">
                 <div className="bg-orange-100 rounded-full w-16 h-16 flex items-center justify-center mb-4 mx-auto">
                   <TrendingUp className="h-8 w-8 text-orange-500" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Market Expertise</h3>
                 <p className="text-sm text-gray-600">
-                  Our experts understand the unique value of Pondicherry's architectural heritage.
+                  Our experts understand the unique value of architectural heritage.
                 </p>
               </div>
               
-              <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow text-center">
+              <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow text-center card-hover">
                 <div className="bg-orange-100 rounded-full w-16 h-16 flex items-center justify-center mb-4 mx-auto">
                   <Building className="h-8 w-8 text-orange-500" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Heritage Specialists</h3>
                 <p className="text-sm text-gray-600">
-                  We specialize in marketing and selling Franco-Tamil heritage properties.
+                  We specialize in marketing and selling heritage properties.
                 </p>
               </div>
             </div>
@@ -84,12 +104,12 @@ const Sell: React.FC = () => {
 
           <PropertyForm />
           
-          <div className="mt-16">
+          <div className="mt-16 reveal">
             <h2 className="text-3xl font-bold text-center mb-10">What Our Sellers Say</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {testimonials.map((testimonial, index) => (
-                <Card key={index} className="overflow-hidden hover:shadow-lg transition-all">
+                <Card key={index} className="overflow-hidden hover:shadow-lg transition-all card-hover">
                   <CardContent className="p-6">
                     <div className="flex mb-4">
                       {[...Array(testimonial.rating)].map((_, i) => (

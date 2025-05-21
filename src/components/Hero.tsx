@@ -10,28 +10,15 @@ const Hero: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
-  // Array of hero images
+  // Array with only Eiffel Tower image as requested
   const heroImages = [
-    "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-1.2.1&auto=format&fit=crop&w=2070&q=80",
-    "https://images.unsplash.com/photo-1466442929976-97f336a657be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-    "https://images.unsplash.com/photo-1524230572899-a752b3835840?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-    "https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
     "/lovable-uploads/0e7fe6d9-ab7d-4d38-9565-7439b5439b5d.png"
   ];
-
-  // Image carousel effect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroImages.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   // Handle scroll to hide indicator
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 100) {
+      if (window.scrollY > 50) {
         setShowScrollIndicator(false);
       } else {
         setShowScrollIndicator(true);
@@ -51,17 +38,13 @@ const Hero: React.FC = () => {
 
   return (
     <div className="relative h-screen w-full">
-      {heroImages.map((image, index) => (
-        <div
-          key={index}
-          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out ${
-            index === currentImageIndex ? "opacity-100" : "opacity-0"
-          }`}
-          style={{ backgroundImage: `url('${image}')` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50"></div>
-        </div>
-      ))}
+      {/* Single Eiffel Tower background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out opacity-100"
+        style={{ backgroundImage: `url('${heroImages[0]}')` }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50"></div>
+      </div>
       <Navigation />
       <div className="relative h-full flex items-center justify-center">
         <div className="w-full max-w-6xl px-4 flex flex-col items-center">
@@ -75,10 +58,10 @@ const Hero: React.FC = () => {
           
           {showScrollIndicator && (
             <div 
-              className="absolute bottom-10 flex flex-col items-center cursor-pointer animate-bounce"
+              className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer animate-bounce transition-opacity duration-500"
               onClick={scrollToContent}
             >
-              <span className="text-white text-sm mb-2">Scroll Down</span>
+              <span className="text-white text-sm mb-2 font-medium">Scroll Down</span>
               <ChevronDown className="text-white h-6 w-6" />
             </div>
           )}
