@@ -9,7 +9,7 @@ const Hero: React.FC = () => {
   const navigate = useNavigate();
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
-  // Single Eiffel Tower image
+  // Single Eiffel Tower image with absolute path to ensure it loads properly
   const heroImage = "/lovable-uploads/0e7fe6d9-ab7d-4d38-9565-7439b5439b5d.png";
 
   // Handle scroll to hide indicator
