@@ -5,6 +5,7 @@ import SellPageHeader from "@/components/sell/SellPageHeader";
 import PropertyForm from "@/components/sell/PropertyForm";
 import { Card, CardContent } from "@/components/ui/card";
 import { IndianRupee, Clock, TrendingUp, Building } from "lucide-react";
+import Navigation from "@/components/Navigation";
 
 const Sell: React.FC = () => {
   const testimonials = [
@@ -30,17 +31,20 @@ const Sell: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Custom SellPageHeader with a selling-related background image */}
+      {/* Custom header for Sell page */}
       <div className="relative h-[400px] w-full">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80')",
+            backgroundSize: "cover",
+            backgroundPosition: "center"
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/40"></div>
         </div>
+        <Navigation />
         <div className="relative h-full flex items-center justify-center">
           <div className="w-full max-w-6xl px-4 text-center">
             <h1 className="text-white text-4xl md:text-5xl font-bold mb-4 animate-fade-in">

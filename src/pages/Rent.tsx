@@ -20,6 +20,8 @@ const Rent: React.FC = () => {
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1603262110263-fb0112e7cc33?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80')",
+            backgroundSize: "cover",
+            backgroundPosition: "center"
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/40"></div>
