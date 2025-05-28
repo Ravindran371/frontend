@@ -1,135 +1,218 @@
 
 import React from "react";
 import Footer from "@/components/Footer";
-import SellPageHeader from "@/components/sell/SellPageHeader";
-import PropertyForm from "@/components/sell/PropertyForm";
-import { Card, CardContent } from "@/components/ui/card";
-import { IndianRupee, Clock, TrendingUp, Building } from "lucide-react";
 import Navigation from "@/components/Navigation";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 const Sell: React.FC = () => {
-  const testimonials = [
-    {
-      name: "Priya Rangan",
-      role: "Sold heritage home in White Town",
-      comment: "I received multiple offers within a week of listing my property. The team guided me through the entire process.",
-      rating: 5
-    },
-    {
-      name: "Jean-Pierre Dubois",
-      role: "Sold colonial mansion in French Quarter",
-      comment: "Excellent market knowledge and professional service. Got a price better than expected for my ancestral property.",
-      rating: 5
-    },
-    {
-      name: "Raj Sundaram",
-      role: "Sold beachfront villa",
-      comment: "The targeted marketing approach attracted buyers specifically looking for luxury beachfront properties.",
-      rating: 4
-    }
-  ];
-
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Custom header for Sell page */}
-      <div className="relative h-[400px] w-full">
+      <div className="relative h-[300px] w-full">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80')",
-            backgroundSize: "cover",
-            backgroundPosition: "center"
+              "url('https://images.unsplash.com/photo-1496568816309-51d7c20e3b21?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')",
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/40"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/40"></div>
         </div>
         <Navigation />
         <div className="relative h-full flex items-center justify-center">
-          <div className="w-full max-w-6xl px-4 text-center">
-            <h1 className="text-white text-4xl md:text-5xl font-bold mb-4 animate-fade-in">
+          <div className="w-full max-w-6xl px-4">
+            <h1 className="text-white text-4xl md:text-5xl font-bold mb-4 text-center">
               Sell Your Property
             </h1>
-            <p className="text-white text-xl max-w-3xl mx-auto animate-slide-up delay-200">
-              Get the best value for your property with our expert team
-            </p>
           </div>
         </div>
       </div>
 
-      <div className="bg-gradient-to-b from-gray-50 to-white py-16">
+      <div className="bg-gray-50 py-16">
         <div className="container mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-xl p-8 max-w-4xl mx-auto -mt-20 relative z-10 mb-16 hover-shadow-effect">
-            <h2 className="text-3xl font-bold mb-4 text-gray-800 text-center">Why Sell With Us?</h2>
-            <p className="text-center text-gray-600 mb-10">We specialize in marketing unique heritage properties</p>
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800">List Your Property</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow text-center card-hover">
-                <div className="bg-orange-100 rounded-full w-16 h-16 flex items-center justify-center mb-4 mx-auto">
-                  <IndianRupee className="h-8 w-8 text-orange-500" />
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Property Title
+                  </label>
+                  <Input 
+                    type="text"
+                    placeholder="E.g. Modern Villa with Pool"
+                    className="w-full"
+                  />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Premium Pricing</h3>
-                <p className="text-sm text-gray-600">
-                  Get the best price for your heritage or colonial property through our specialized valuation.
-                </p>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Property Type
+                  </label>
+                  <Select>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="house">House</SelectItem>
+                      <SelectItem value="apartment">Apartment</SelectItem>
+                      <SelectItem value="villa">Villa</SelectItem>
+                      <SelectItem value="plot">Plot</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               
-              <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow text-center card-hover">
-                <div className="bg-orange-100 rounded-full w-16 h-16 flex items-center justify-center mb-4 mx-auto">
-                  <Clock className="h-8 w-8 text-orange-500" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Location
+                  </label>
+                  <Input 
+                    type="text"
+                    placeholder="City, Neighborhood"
+                    className="w-full"
+                  />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Quick Sale</h3>
-                <p className="text-sm text-gray-600">
-                  Our network of qualified buyers looking specifically for heritage properties ensures faster sales.
-                </p>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Price
+                  </label>
+                  <Input 
+                    type="number"
+                    placeholder="Enter amount"
+                    className="w-full"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Property Size (sqft)
+                  </label>
+                  <Input 
+                    type="number"
+                    placeholder="Size in sqft"
+                    className="w-full"
+                  />
+                </div>
               </div>
               
-              <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow text-center card-hover">
-                <div className="bg-orange-100 rounded-full w-16 h-16 flex items-center justify-center mb-4 mx-auto">
-                  <TrendingUp className="h-8 w-8 text-orange-500" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Bedrooms
+                  </label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1</SelectItem>
+                      <SelectItem value="2">2</SelectItem>
+                      <SelectItem value="3">3</SelectItem>
+                      <SelectItem value="4">4</SelectItem>
+                      <SelectItem value="5+">5+</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Market Expertise</h3>
-                <p className="text-sm text-gray-600">
-                  Our experts understand the unique value of architectural heritage.
-                </p>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Bathrooms
+                  </label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1</SelectItem>
+                      <SelectItem value="2">2</SelectItem>
+                      <SelectItem value="3">3</SelectItem>
+                      <SelectItem value="4">4</SelectItem>
+                      <SelectItem value="5+">5+</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Year Built
+                  </label>
+                  <Input 
+                    type="number"
+                    placeholder="Year"
+                    className="w-full"
+                  />
+                </div>
               </div>
               
-              <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow text-center card-hover">
-                <div className="bg-orange-100 rounded-full w-16 h-16 flex items-center justify-center mb-4 mx-auto">
-                  <Building className="h-8 w-8 text-orange-500" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">Heritage Specialists</h3>
-                <p className="text-sm text-gray-600">
-                  We specialize in marketing and selling heritage properties.
-                </p>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description
+                </label>
+                <Textarea 
+                  placeholder="Describe your property..."
+                  className="w-full h-32"
+                />
               </div>
-            </div>
-          </div>
-
-          <PropertyForm />
-          
-          <div className="mt-16 reveal">
-            <h2 className="text-3xl font-bold text-center mb-10">What Our Sellers Say</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {testimonials.map((testimonial, index) => (
-                <Card key={index} className="overflow-hidden hover:shadow-lg transition-all card-hover">
-                  <CardContent className="p-6">
-                    <div className="flex mb-4">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <svg key={i} className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z"></path>
-                        </svg>
-                      ))}
-                    </div>
-                    <p className="text-gray-700 mb-4 italic">"{testimonial.comment}"</p>
-                    <div>
-                      <p className="font-semibold">{testimonial.name}</p>
-                      <p className="text-sm text-gray-600">{testimonial.role}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+              
+              <div className="space-y-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Property Images
+                </label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                  <div className="mt-1 flex justify-center">
+                    <Label 
+                      htmlFor="property-images" 
+                      className="cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 px-4 py-2 border border-gray-300"
+                    >
+                      Upload Images
+                    </Label>
+                    <Input 
+                      id="property-images" 
+                      type="file" 
+                      multiple 
+                      accept="image/*"
+                      className="sr-only" 
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">PNG, JPG, GIF up to 5MB each</p>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Property Video
+                </label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                  <div className="mt-1 flex justify-center">
+                    <Label 
+                      htmlFor="property-video" 
+                      className="cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 px-4 py-2 border border-gray-300"
+                    >
+                      Upload Video
+                    </Label>
+                    <Input 
+                      id="property-video" 
+                      type="file" 
+                      accept="video/*"
+                      className="sr-only" 
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">MP4, MOV up to 50MB</p>
+                </div>
+              </div>
+              
+              <div className="flex justify-center">
+                <Button className="bg-orange-500 hover:bg-orange-600 text-white py-3 px-8 rounded-md text-lg">
+                  Submit Property
+                </Button>
+              </div>
             </div>
           </div>
         </div>

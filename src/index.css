@@ -107,22 +107,6 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Hide scrollbars but allow scrolling */
-body {
-  scrollbar-width: none; /* Firefox */
-}
-
-body::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Edge */
-}
-
-/* Fix brightness issue when scrolling */
-.bg-gradient-to-b {
-  background-image: linear-gradient(to bottom, 
-    rgba(249, 250, 251, 0.9) 0%, 
-    rgba(249, 250, 251, 1) 100%);
-}
-
 /* Make images in property cards uniform height */
 .property-image {
   height: 250px;
@@ -131,18 +115,14 @@ body::-webkit-scrollbar {
 }
 
 /* Improved hover effects on cards */
-.hover-shadow-effect {
-  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
 .hover-shadow-effect:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 /* For any elements that need to fade in */
 .fade-in {
-  animation: fadeIn 0.8s ease-in;
+  animation: fadeIn 0.5s ease-in;
 }
 
 @keyframes fadeIn {
@@ -153,135 +133,4 @@ body::-webkit-scrollbar {
 /* Button styling */
 .btn-primary {
   @apply bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded transition duration-300;
-}
-
-/* Enhanced animations */
-@keyframes slideInFromBottom {
-  0% { 
-    transform: translateY(40px);
-    opacity: 0;
-  }
-  100% { 
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideInFromLeft {
-  0% { 
-    transform: translateX(-40px);
-    opacity: 0;
-  }
-  100% { 
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideInFromRight {
-  0% { 
-    transform: translateX(40px);
-    opacity: 0;
-  }
-  100% { 
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes zoomIn {
-  0% { 
-    transform: scale(0.90);
-    opacity: 0;
-  }
-  100% { 
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* Animation classes */
-.animate-fade-in {
-  animation: fadeIn 1s ease forwards;
-}
-
-.animate-slide-up {
-  animation: slideInFromBottom 1s ease forwards;
-}
-
-.animate-slide-left {
-  animation: slideInFromLeft 1s ease forwards;
-}
-
-.animate-slide-right {
-  animation: slideInFromRight 1s ease forwards;
-}
-
-.animate-zoom-in {
-  animation: zoomIn 1s ease forwards;
-}
-
-/* Animation delays */
-.delay-100 {
-  animation-delay: 100ms;
-}
-
-.delay-200 {
-  animation-delay: 200ms;
-}
-
-.delay-300 {
-  animation-delay: 300ms;
-}
-
-.delay-400 {
-  animation-delay: 400ms;
-}
-
-.delay-500 {
-  animation-delay: 500ms;
-}
-
-/* Scroll animations - enhanced */
-.reveal {
-  opacity: 0;
-  transform: translateY(50px);
-  transition: all 1.2s cubic-bezier(0.5, 0, 0, 1);
-}
-
-.reveal.active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Image transition effect */
-.image-fade {
-  transition: opacity 1.2s ease-in-out;
-}
-
-.image-zoom {
-  overflow: hidden;
-}
-
-.image-zoom img {
-  transition: transform 0.8s ease;
-}
-
-.image-zoom:hover img {
-  transform: scale(1.08);
-}
-
-/* Smooth section transitions */
-.section-transition {
-  transition: background-color 0.5s ease, padding 0.5s ease;
-}
-
-/* Card hover effects */
-.card-hover {
-  transition: all 0.4s ease;
-}
-
-.card-hover:hover {
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  transform: translateY(-5px);
 }
