@@ -59,12 +59,6 @@ const Footer: React.FC = () => {
                   Contact
                 </Link>
               </li>
-              <li>
-                <Link to="/" className="text-gray-300 hover:text-orange-400 transition-colors duration-300 flex items-center group">
-                  <span className="mr-2 transition-transform duration-300 group-hover:translate-x-1">›</span>
-                  Blog
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -108,14 +102,9 @@ const Footer: React.FC = () => {
         
         <Separator className="bg-gray-700 my-8" />
         
-        <div className="flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
+        <div className="flex flex-col md:flex-row justify-center items-center text-gray-400 text-sm">
           <div className="mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} Real Estate Website. All rights reserved.
-          </div>
-          <div className="flex space-x-4">
-            <Link to="#" className="hover:text-orange-400 transition-colors">Privacy Policy</Link>
-            <Link to="#" className="hover:text-orange-400 transition-colors">Terms of Service</Link>
-            <Link to="#" className="hover:text-orange-400 transition-colors">Sitemap</Link>
+            &copy; {new Date().getFullYear()} Luxury Estates. All rights reserved.
           </div>
         </div>
       </div>

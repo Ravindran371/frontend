@@ -13,10 +13,8 @@ const Navigation: React.FC = () => {
     <nav className="absolute top-0 left-0 right-0 p-6 z-10 flex justify-between items-center">
       <div className="text-white text-xl font-bold">
         <Link to="/" className="flex items-center">
-          <span className="text-orange-400">France</span>
-          <span className="mx-1">•</span>
-          <span className="text-white">India</span>
-          <span className="ml-1 text-sm text-orange-300">Realty</span>
+          <span className="text-orange-400">Luxury</span>
+          <span className="ml-1 text-white">Estates</span>
         </Link>
       </div>
       

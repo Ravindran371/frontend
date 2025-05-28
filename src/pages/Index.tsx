@@ -5,7 +5,6 @@ import PropertySection from "@/components/PropertySection";
 import CallToAction from "@/components/CallToAction";
 import ServicesSection from "@/components/ServicesSection";
 import AgentsSection from "@/components/AgentsSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
 import Footer from "@/components/Footer";
 
 const Index: React.FC = () => {
@@ -18,7 +17,6 @@ const Index: React.FC = () => {
       <PropertySection title="For Rent" subtitle="Explore our properties for rent." type="rent" />
       <ServicesSection />
       <AgentsSection />
-      <TestimonialsSection />
       <Footer />
     </div>
   );

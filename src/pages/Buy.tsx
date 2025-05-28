@@ -14,7 +14,7 @@ const Buy: React.FC = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1499856871958-5b9088d4687f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')",
+              "url('https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')",
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/40"></div>
@@ -68,18 +68,11 @@ const Buy: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Budget
                 </label>
-                <Select defaultValue="any">
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select budget" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="any">Any</SelectItem>
-                    <SelectItem value="100k-200k">$100k - $200k</SelectItem>
-                    <SelectItem value="200k-500k">$200k - $500k</SelectItem>
-                    <SelectItem value="500k-800k">$500k - $800k</SelectItem>
-                    <SelectItem value="800k+">$800k+</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Input 
+                  type="text"
+                  placeholder="Enter your budget range"
+                  className="w-full"
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -87,35 +80,22 @@ const Buy: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Bedrooms (Min)
                   </label>
-                  <Select defaultValue="any">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Any" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="any">Any</SelectItem>
-                      <SelectItem value="1">1</SelectItem>
-                      <SelectItem value="2">2</SelectItem>
-                      <SelectItem value="3">3</SelectItem>
-                      <SelectItem value="4">4+</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Input 
+                    type="text"
+                    placeholder="Number of bedrooms"
+                    className="w-full"
+                  />
                 </div>
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Bathrooms (Min)
                   </label>
-                  <Select defaultValue="any">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Any" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="any">Any</SelectItem>
-                      <SelectItem value="1">1</SelectItem>
-                      <SelectItem value="2">2</SelectItem>
-                      <SelectItem value="3">3+</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Input 
+                    type="text"
+                    placeholder="Number of bathrooms"
+                    className="w-full"
+                  />
                 </div>
               </div>
               

@@ -40,20 +40,21 @@ const Sell: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Property Title
+                    Property Title <span className="text-red-500">*</span>
                   </label>
                   <Input 
                     type="text"
                     placeholder="E.g. Modern Villa with Pool"
                     className="w-full"
+                    required
                   />
                 </div>
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Property Type
+                    Property Type <span className="text-red-500">*</span>
                   </label>
-                  <Select>
+                  <Select required>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select type" />
                     </SelectTrigger>
@@ -70,34 +71,37 @@ const Sell: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Location
+                    Location <span className="text-red-500">*</span>
                   </label>
                   <Input 
                     type="text"
                     placeholder="City, Neighborhood"
                     className="w-full"
+                    required
                   />
                 </div>
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Price
+                    Price <span className="text-red-500">*</span>
                   </label>
                   <Input 
                     type="number"
                     placeholder="Enter amount"
                     className="w-full"
+                    required
                   />
                 </div>
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Property Size (sqft)
+                    Property Size (sqft) <span className="text-red-500">*</span>
                   </label>
                   <Input 
                     type="number"
                     placeholder="Size in sqft"
                     className="w-full"
+                    required
                   />
                 </div>
               </div>
@@ -105,9 +109,9 @@ const Sell: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Bedrooms
+                    Bedrooms <span className="text-red-500">*</span>
                   </label>
-                  <Select>
+                  <Select required>
                     <SelectTrigger>
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
@@ -123,9 +127,9 @@ const Sell: React.FC = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Bathrooms
+                    Bathrooms <span className="text-red-500">*</span>
                   </label>
-                  <Select>
+                  <Select required>
                     <SelectTrigger>
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
@@ -141,29 +145,31 @@ const Sell: React.FC = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Year Built
+                    Year Built <span className="text-red-500">*</span>
                   </label>
                   <Input 
                     type="number"
                     placeholder="Year"
                     className="w-full"
+                    required
                   />
                 </div>
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
+                  Description <span className="text-red-500">*</span>
                 </label>
                 <Textarea 
                   placeholder="Describe your property..."
                   className="w-full h-32"
+                  required
                 />
               </div>
               
               <div className="space-y-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Property Images
+                  Property Images <span className="text-red-500">*</span>
                 </label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                   <div className="mt-1 flex justify-center">
@@ -179,6 +185,7 @@ const Sell: React.FC = () => {
                       multiple 
                       accept="image/*"
                       className="sr-only" 
+                      required
                     />
                   </div>
                   <p className="text-xs text-gray-500 mt-2">PNG, JPG, GIF up to 5MB each</p>

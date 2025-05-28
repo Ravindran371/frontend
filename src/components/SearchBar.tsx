@@ -16,19 +16,22 @@ const SearchBar: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    // Navigate to the appropriate page based on search type
-    navigate(`/${searchType}`);
+    if (searchType === "sell") {
+      navigate("/sell");
+    } else {
+      navigate(`/${searchType}`);
+    }
   };
 
   return (
-    <div className="bg-white/30 backdrop-blur-sm rounded-lg shadow-lg p-4 md:p-6">
+    <div className="bg-white/10 backdrop-blur-md rounded-lg shadow-2xl p-4 md:p-6 border border-white/20">
       <div className="flex flex-col md:flex-row gap-4 items-end">
         <div className="flex-1 md:flex-none md:w-1/4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-white mb-1">
             Looking for
           </label>
           <Select defaultValue="buy" onValueChange={(value) => setSearchType(value)}>
-            <SelectTrigger className="w-full bg-transparent border border-gray-300">
+            <SelectTrigger className="w-full bg-transparent border border-white/30 text-white">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
@@ -40,22 +43,11 @@ const SearchBar: React.FC = () => {
         </div>
         
         <div className="flex-1 md:flex-none md:w-1/4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Location
-          </label>
-          <Input
-            type="text"
-            placeholder="City, Neighborhood"
-            className="w-full bg-transparent border border-gray-300"
-          />
-        </div>
-        
-        <div className="flex-1 md:flex-none md:w-1/4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-white mb-1">
             Property Type
           </label>
           <Select defaultValue="any">
-            <SelectTrigger className="w-full bg-transparent border border-gray-300">
+            <SelectTrigger className="w-full bg-transparent border border-white/30 text-white">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
@@ -68,9 +60,20 @@ const SearchBar: React.FC = () => {
           </Select>
         </div>
         
+        <div className="flex-1 md:flex-none md:w-1/4">
+          <label className="block text-sm font-medium text-white mb-1">
+            Location
+          </label>
+          <Input
+            type="text"
+            placeholder="City, Neighborhood"
+            className="w-full bg-transparent border border-white/30 text-white placeholder:text-white/70"
+          />
+        </div>
+        
         <div className="md:w-auto">
           <Button 
-            className="w-full md:w-auto bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-md"
+            className="w-full md:w-auto bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-md shadow-lg"
             onClick={handleSearch}
           >
             Search
