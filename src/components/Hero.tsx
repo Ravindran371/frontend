@@ -3,36 +3,41 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import Navigation from "./Navigation";
+import { ChevronDown } from "lucide-react";
 
 const Hero: React.FC = () => {
   const navigate = useNavigate();
 
+  const scrollToContent = () => {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+  };
+
   return (
-    <div className="relative h-[600px] w-full">
+    <div className="relative h-screen w-full">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: `
-            linear-gradient(45deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1)),
-            url('https://images.unsplash.com/photo-1613977257363-707ba9348227?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80'),
-            url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80'),
-            url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')
-          `,
-          backgroundBlendMode: 'overlay, normal, normal, normal',
+          backgroundImage: `url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')`
         }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-black/10"></div>
-      </div>
+      />
       <Navigation />
       <div className="relative h-full flex items-center justify-center">
         <div className="w-full max-w-6xl px-4">
-          <h1 className="text-white text-4xl md:text-5xl font-bold mb-2 text-center drop-shadow-lg">
+          <h1 className="text-white text-4xl md:text-5xl font-bold mb-8 text-center drop-shadow-lg">
             Find Your Dream Home
           </h1>
-          <h2 className="text-white text-xl md:text-2xl font-light mb-8 text-center drop-shadow-md">
-            Luxury Properties Await You
-          </h2>
           <SearchBar />
+        </div>
+      </div>
+      
+      {/* Scroll down indicator */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white cursor-pointer animate-bounce" onClick={scrollToContent}>
+        <div className="flex flex-col items-center">
+          <span className="text-sm mb-2">Scroll Down</span>
+          <ChevronDown className="h-6 w-6" />
         </div>
       </div>
     </div>

@@ -10,14 +10,7 @@ const Navigation: React.FC = () => {
   };
   
   return (
-    <nav className="absolute top-0 left-0 right-0 p-6 z-10 flex justify-between items-center">
-      <div className="text-white text-xl font-bold">
-        <Link to="/" className="flex items-center">
-          <span className="text-orange-400">Luxury</span>
-          <span className="ml-1 text-white">Estates</span>
-        </Link>
-      </div>
-      
+    <nav className="absolute top-0 left-0 right-0 p-6 z-10 flex justify-end items-center">
       <ul className="flex flex-wrap space-x-4 md:space-x-6">
         <li>
           <Link to="/" className={`${isActive('/')} hover:text-orange-400 transition-colors font-medium pb-1`}>Home</Link>

@@ -24,14 +24,14 @@ const SearchBar: React.FC = () => {
   };
 
   return (
-    <div className="bg-white/10 backdrop-blur-md rounded-lg shadow-2xl p-4 md:p-6 border border-white/20">
+    <div className="bg-transparent backdrop-blur-sm rounded-lg p-4 md:p-6 border border-white/10">
       <div className="flex flex-col md:flex-row gap-4 items-end">
-        <div className="flex-1 md:flex-none md:w-1/4">
+        <div className="flex-1 md:flex-none md:w-1/3">
           <label className="block text-sm font-medium text-white mb-1">
             Looking for
           </label>
           <Select defaultValue="buy" onValueChange={(value) => setSearchType(value)}>
-            <SelectTrigger className="w-full bg-transparent border border-white/30 text-white">
+            <SelectTrigger className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
@@ -42,12 +42,23 @@ const SearchBar: React.FC = () => {
           </Select>
         </div>
         
-        <div className="flex-1 md:flex-none md:w-1/4">
+        <div className="flex-1 md:flex-none md:w-1/3">
+          <label className="block text-sm font-medium text-white mb-1">
+            Location
+          </label>
+          <Input
+            type="text"
+            placeholder="City, Neighborhood"
+            className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder:text-white/70"
+          />
+        </div>
+        
+        <div className="flex-1 md:flex-none md:w-1/3">
           <label className="block text-sm font-medium text-white mb-1">
             Property Type
           </label>
           <Select defaultValue="any">
-            <SelectTrigger className="w-full bg-transparent border border-white/30 text-white">
+            <SelectTrigger className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
@@ -58,17 +69,6 @@ const SearchBar: React.FC = () => {
               <SelectItem value="plot">Plot</SelectItem>
             </SelectContent>
           </Select>
-        </div>
-        
-        <div className="flex-1 md:flex-none md:w-1/4">
-          <label className="block text-sm font-medium text-white mb-1">
-            Location
-          </label>
-          <Input
-            type="text"
-            placeholder="City, Neighborhood"
-            className="w-full bg-transparent border border-white/30 text-white placeholder:text-white/70"
-          />
         </div>
         
         <div className="md:w-auto">
