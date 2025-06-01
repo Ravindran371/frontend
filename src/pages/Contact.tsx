@@ -35,7 +35,7 @@ const Contact: React.FC = () => {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-800 mb-4">Get In Touch</h2>
-              <div className="w-20 h-1 bg-orange-500 mx-auto mb-6"></div>
+              <div className="w-20 h-1 bg-teal-500 mx-auto mb-6"></div>
               <p className="text-lg text-gray-600">
                 We'd love to hear from you. Reach out to us for any inquiries.
               </p>
@@ -43,8 +43,8 @@ const Contact: React.FC = () => {
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
               <div className="bg-gray-50 rounded-xl p-6 text-center hover:shadow-lg transition-shadow">
-                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="h-6 w-6 text-orange-500" />
+                <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <MapPin className="h-6 w-6 text-teal-500" />
                 </div>
                 <h3 className="font-bold text-gray-800 mb-2">Our Location</h3>
                 <p className="text-gray-600">123 Avenue des Champs-Élysées</p>
@@ -52,8 +52,8 @@ const Contact: React.FC = () => {
               </div>
               
               <div className="bg-gray-50 rounded-xl p-6 text-center hover:shadow-lg transition-shadow">
-                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Phone className="h-6 w-6 text-orange-500" />
+                <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Phone className="h-6 w-6 text-teal-500" />
                 </div>
                 <h3 className="font-bold text-gray-800 mb-2">Call Us</h3>
                 <p className="text-gray-600">+91 98765 43210</p>
@@ -61,8 +61,8 @@ const Contact: React.FC = () => {
               </div>
               
               <div className="bg-gray-50 rounded-xl p-6 text-center hover:shadow-lg transition-shadow">
-                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Mail className="h-6 w-6 text-orange-500" />
+                <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Mail className="h-6 w-6 text-teal-500" />
                 </div>
                 <h3 className="font-bold text-gray-800 mb-2">Email Us</h3>
                 <p className="text-gray-600">info@franceindia-realty.com</p>
@@ -121,7 +121,7 @@ const Contact: React.FC = () => {
                   </div>
                   
                   <div>
-                    <Button className="bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-md">
+                    <Button className="bg-teal-500 hover:bg-teal-600 text-white py-3 px-6 rounded-md">
                       Send Message
                     </Button>
                   </div>
@@ -133,7 +133,7 @@ const Contact: React.FC = () => {
                 
                 <div className="bg-gray-50 rounded-xl p-6 mb-8">
                   <div className="flex items-start">
-                    <Clock className="h-5 w-5 text-orange-500 mt-1 mr-3" />
+                    <Clock className="h-5 w-5 text-teal-500 mt-1 mr-3" />
                     <div>
                       <h4 className="font-bold text-gray-800 mb-2">Working Hours</h4>
                       <div className="space-y-2 text-gray-600">
@@ -154,14 +154,14 @@ const Contact: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="bg-orange-50 rounded-xl p-6 border border-orange-200">
+                <div className="bg-teal-50 rounded-xl p-6 border border-teal-200">
                   <h4 className="font-bold text-gray-800 mb-4">Need Urgent Assistance?</h4>
                   <p className="text-gray-600 mb-4">
                     Our dedicated customer service team is available for urgent inquiries. Feel free to call our hotline for immediate assistance.
                   </p>
                   <div className="flex items-center">
-                    <Phone className="h-5 w-5 text-orange-500 mr-2" />
-                    <span className="font-semibold text-orange-600">+91 99999 88888</span>
+                    <Phone className="h-5 w-5 text-teal-500 mr-2" />
+                    <span className="font-semibold text-teal-600">+91 99999 88888</span>
                   </div>
                 </div>
               </div>

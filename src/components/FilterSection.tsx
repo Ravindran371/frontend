@@ -122,7 +122,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFi
           >
             Clear
           </Button>
-          <Button className="bg-red-500 hover:bg-red-600 text-white rounded-full p-3">
+          <Button className="bg-teal-500 hover:bg-teal-600 text-white rounded-full p-3">
             <Search className="h-4 w-4" />
           </Button>
         </div>

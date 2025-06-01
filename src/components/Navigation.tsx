@@ -12,7 +12,7 @@ const Navigation: React.FC = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 p-4 z-10 flex justify-between items-center">
       <div className="text-2xl font-bold text-red-500">
-        RealEstate
+        PropertyHub
       </div>
       
       <ul className="flex flex-wrap space-x-4 md:space-x-6">
