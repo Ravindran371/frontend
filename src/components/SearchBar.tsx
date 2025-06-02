@@ -24,61 +24,62 @@ const SearchBar: React.FC = () => {
   };
 
   return (
-    <div className="bg-transparent backdrop-blur-sm rounded-lg p-4 md:p-6 border border-white/10">
-      <div className="flex flex-col md:flex-row gap-4 items-end">
-        <div className="flex-1 md:flex-none md:w-1/3">
-          <label className="block text-sm font-medium text-white mb-1">
-            Looking for
-          </label>
-          <Select defaultValue="buy" onValueChange={(value) => setSearchType(value)}>
-            <SelectTrigger className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white">
-              <SelectValue placeholder="Select type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="buy">Buy</SelectItem>
-              <SelectItem value="rent">Rent</SelectItem>
-              <SelectItem value="sell">Sell</SelectItem>
-            </SelectContent>
-          </Select>
+    <div className="bg-white/95 backdrop-blur-sm rounded-lg p-4 md:p-6 shadow-lg mx-4 md:mx-0">
+      <div className="flex flex-col gap-4">
+        {/* Mobile: Stack vertically, Desktop: Horizontal */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Looking for
+            </label>
+            <Select defaultValue="buy" onValueChange={(value) => setSearchType(value)}>
+              <SelectTrigger className="w-full h-12 text-base">
+                <SelectValue placeholder="Select type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="buy">Buy</SelectItem>
+                <SelectItem value="rent">Rent</SelectItem>
+                <SelectItem value="sell">Sell</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Location
+            </label>
+            <Input
+              type="text"
+              placeholder="City, Neighborhood"
+              className="w-full h-12 text-base"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Property Type
+            </label>
+            <Select defaultValue="any">
+              <SelectTrigger className="w-full h-12 text-base">
+                <SelectValue placeholder="Select type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="any">Any</SelectItem>
+                <SelectItem value="house">House</SelectItem>
+                <SelectItem value="apartment">Apartment</SelectItem>
+                <SelectItem value="villa">Villa</SelectItem>
+                <SelectItem value="plot">Plot</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
         
-        <div className="flex-1 md:flex-none md:w-1/3">
-          <label className="block text-sm font-medium text-white mb-1">
-            Location
-          </label>
-          <Input
-            type="text"
-            placeholder="City, Neighborhood"
-            className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder:text-white/70"
-          />
-        </div>
-        
-        <div className="flex-1 md:flex-none md:w-1/3">
-          <label className="block text-sm font-medium text-white mb-1">
-            Property Type
-          </label>
-          <Select defaultValue="any">
-            <SelectTrigger className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white">
-              <SelectValue placeholder="Select type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="any">Any</SelectItem>
-              <SelectItem value="house">House</SelectItem>
-              <SelectItem value="apartment">Apartment</SelectItem>
-              <SelectItem value="villa">Villa</SelectItem>
-              <SelectItem value="plot">Plot</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        
-        <div className="md:w-auto">
-          <Button 
-            className="w-full md:w-auto bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-md shadow-lg"
-            onClick={handleSearch}
-          >
-            Search
-          </Button>
-        </div>
+        <Button 
+          className="w-full bg-orange-500 hover:bg-orange-600 text-white h-12 text-lg font-medium rounded-md shadow-lg"
+          onClick={handleSearch}
+        >
+          Search Properties
+        </Button>
       </div>
     </div>
   );

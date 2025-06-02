@@ -33,21 +33,21 @@ const Contact: React.FC = () => {
     <div className="min-h-screen bg-white">
       <Navigation />
       
-      <div className="container mx-auto px-4 pt-24 pb-8">
+      <div className="container mx-auto px-4 pt-20 md:pt-24 pb-8">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold text-black mb-8 text-center">Contact</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-black mb-6 md:mb-8 text-center">Contact</h1>
           
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
             {/* Contact Form */}
-            <Card>
+            <Card className="order-2 lg:order-1">
               <CardHeader>
-                <CardTitle className="text-2xl text-gray-800">Get in Touch</CardTitle>
+                <CardTitle className="text-xl md:text-2xl text-gray-800">Get in Touch</CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-4">
+                <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         Name
                       </label>
                       <Input
@@ -55,10 +55,11 @@ const Contact: React.FC = () => {
                         value={formData.name}
                         onChange={(e) => handleChange("name", e.target.value)}
                         placeholder="Your name"
+                        className="h-12 text-base"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         Email
                       </label>
                       <Input
@@ -67,23 +68,25 @@ const Contact: React.FC = () => {
                         value={formData.email}
                         onChange={(e) => handleChange("email", e.target.value)}
                         placeholder="Your email"
+                        className="h-12 text-base"
                       />
                     </div>
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       Phone
                     </label>
                     <Input
                       value={formData.phone}
                       onChange={(e) => handleChange("phone", e.target.value)}
                       placeholder="Your phone number"
+                      className="h-12 text-base"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       Message
                     </label>
                     <Textarea
@@ -91,11 +94,11 @@ const Contact: React.FC = () => {
                       value={formData.message}
                       onChange={(e) => handleChange("message", e.target.value)}
                       placeholder="How can we help you?"
-                      className="min-h-[120px]"
+                      className="min-h-[120px] text-base"
                     />
                   </div>
                   
-                  <Button type="submit" className="w-full bg-teal-500 hover:bg-teal-600 text-white">
+                  <Button type="submit" className="w-full bg-teal-500 hover:bg-teal-600 text-white h-12 text-lg">
                     Send Message
                   </Button>
                 </form>
@@ -103,33 +106,33 @@ const Contact: React.FC = () => {
             </Card>
             
             {/* Contact Information */}
-            <div className="space-y-8">
+            <div className="space-y-6 md:space-y-8 order-1 lg:order-2">
               <div>
-                <h2 className="text-2xl font-semibold text-gray-800 mb-6">Contact Information</h2>
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
+                <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4 md:mb-6">Contact Information</h2>
+                <div className="space-y-4 md:space-y-6">
+                  <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
                     <Phone className="h-6 w-6 text-teal-500 mt-1" />
                     <div>
-                      <h3 className="font-semibold text-gray-800">Phone</h3>
-                      <p className="text-gray-600">+91 12345 67890</p>
-                      <p className="text-gray-600">+91 98765 43210</p>
+                      <h3 className="font-semibold text-gray-800 text-lg">Phone</h3>
+                      <p className="text-gray-600 text-base">+91 12345 67890</p>
+                      <p className="text-gray-600 text-base">+91 98765 43210</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
                     <Mail className="h-6 w-6 text-teal-500 mt-1" />
                     <div>
-                      <h3 className="font-semibold text-gray-800">Email</h3>
-                      <p className="text-gray-600">info@pondy.com</p>
-                      <p className="text-gray-600">support@pondy.com</p>
+                      <h3 className="font-semibold text-gray-800 text-lg">Email</h3>
+                      <p className="text-gray-600 text-base">info@pondy.com</p>
+                      <p className="text-gray-600 text-base">support@pondy.com</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
                     <MapPin className="h-6 w-6 text-teal-500 mt-1" />
                     <div>
-                      <h3 className="font-semibold text-gray-800">Address</h3>
-                      <p className="text-gray-600">
+                      <h3 className="font-semibold text-gray-800 text-lg">Address</h3>
+                      <p className="text-gray-600 text-base">
                         123 Real Estate Street,<br />
                         Pondicherry, India 605001
                       </p>
@@ -139,9 +142,9 @@ const Contact: React.FC = () => {
               </div>
               
               <div>
-                <h2 className="text-2xl font-semibold text-gray-800 mb-4">Office Hours</h2>
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <div className="space-y-2 text-gray-600">
+                <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4">Office Hours</h2>
+                <div className="bg-gray-50 p-4 md:p-6 rounded-lg">
+                  <div className="space-y-3 text-gray-600 text-base">
                     <div className="flex justify-between">
                       <span>Monday - Friday:</span>
                       <span>9:00 AM - 6:00 PM</span>
