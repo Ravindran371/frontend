@@ -5,6 +5,17 @@ import Navigation from "@/components/Navigation";
 
 const About: React.FC = () => {
   return (
+    <div className="flex flex-col min-h-screen">
+      <div className="relative h-[300px] w-full">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1503917988258-f87a78e3c995?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')",
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/40"></div>
+        </div>
         <Navigation />
         <div className="relative h-full flex items-center justify-center">
           <div className="w-full max-w-6xl px-4">
