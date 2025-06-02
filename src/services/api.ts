@@ -42,12 +42,14 @@ export const apiService = {
       return [
         {
           id: 1,
+          title: "Modern Villa in Los Angeles",
           location: "Los Angeles, CA",
           area: "Downtown",
           price: "₹2,800,000",
           bedrooms: 4,
           bathrooms: 3,
           squareFootage: "2,300 sq ft",
+          image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
           images: ["https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"],
           agent: {
             name: "Jennifer Barton",
