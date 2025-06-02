@@ -4,32 +4,34 @@ const API_BASE_URL = process.env.NODE_ENV === 'production'
   : 'http://localhost:3001/api';
 
 export interface Property {
-  id: number;
-  title: string;
+  _id?: string;
+  id?: number;
   location: string;
+  area: string;
   price: string;
   bedrooms: number;
   bathrooms: number;
-  area: string;
-  latitude?: number;
-  longitude?: number;
-  image: string;
+  squareFootage: string;
   images?: File[] | string[];
   video?: File | string;
   agent: {
     name: string;
     image: string;
   };
-  featured: boolean;
+  featured?: boolean;
   type: string;
+  propertyType?: string;
   listingType: "buy" | "rent" | "sell";
+  status: "available" | "sold" | "rented";
+  owner?: any;
+  createdAt?: string;
 }
 
 export const apiService = {
   // Get all properties
-  async getProperties(): Promise<Property[]> {
+  async getProperties(status: string = 'available'): Promise<Property[]> {
     try {
-      const response = await fetch(`${API_BASE_URL}/properties`);
+      const response = await fetch(`${API_BASE_URL}/properties?status=${status}`);
       if (!response.ok) throw new Error('Failed to fetch properties');
       return await response.json();
     } catch (error) {
@@ -38,15 +40,13 @@ export const apiService = {
       return [
         {
           id: 1,
-          title: "Modern Villa in Los Angeles",
           location: "Los Angeles, CA",
+          area: "Downtown",
           price: "₹2,800,000",
           bedrooms: 4,
           bathrooms: 3,
-          area: "2,300 sq ft",
-          latitude: 34.0522,
-          longitude: -118.2437,
-          image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+          squareFootage: "2,300 sq ft",
+          images: ["https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"],
           agent: {
             name: "Jennifer Barton",
             image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
@@ -54,51 +54,14 @@ export const apiService = {
           featured: true,
           type: "villa",
           listingType: "buy" as const,
-        },
-        {
-          id: 2,
-          title: "Luxury Family Home",
-          location: "San Diego, CA",
-          price: "₹1,850,000",
-          bedrooms: 5,
-          bathrooms: 4,
-          area: "3,100 sq ft",
-          latitude: 32.7157,
-          longitude: -117.1611,
-          image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-          agent: {
-            name: "Michael Chen",
-            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
-          },
-          featured: false,
-          type: "house",
-          listingType: "buy" as const,
-        },
-        {
-          id: 3,
-          title: "Waterfront Apartment with Pool",
-          location: "Miami Beach, FL",
-          price: "₹5,200/month",
-          bedrooms: 3,
-          bathrooms: 2,
-          area: "1,800 sq ft",
-          latitude: 25.7907,
-          longitude: -80.1300,
-          image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-          agent: {
-            name: "Sarah Miller",
-            image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
-          },
-          featured: false,
-          type: "apartment",
-          listingType: "rent" as const,
+          status: "available" as const,
         }
       ];
     }
   },
 
   // Get property by ID
-  async getPropertyById(id: number): Promise<Property | null> {
+  async getPropertyById(id: string): Promise<Property | null> {
     try {
       const response = await fetch(`${API_BASE_URL}/properties/${id}`);
       if (!response.ok) throw new Error('Failed to fetch property');
@@ -110,10 +73,13 @@ export const apiService = {
   },
 
   // Create new property
-  async createProperty(propertyData: FormData): Promise<Property> {
+  async createProperty(propertyData: FormData, token: string): Promise<Property> {
     try {
       const response = await fetch(`${API_BASE_URL}/properties`, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
         body: propertyData,
       });
       if (!response.ok) throw new Error('Failed to create property');
@@ -134,6 +100,41 @@ export const apiService = {
     } catch (error) {
       console.error('Error filtering properties:', error);
       return [];
+    }
+  },
+
+  // Update property status
+  async updatePropertyStatus(id: string, status: string, token: string): Promise<Property> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/properties/${id}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status }),
+      });
+      if (!response.ok) throw new Error('Failed to update property status');
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating property status:', error);
+      throw error;
+    }
+  },
+
+  // Delete property
+  async deleteProperty(id: string, token: string): Promise<void> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/properties/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) throw new Error('Failed to delete property');
+    } catch (error) {
+      console.error('Error deleting property:', error);
+      throw error;
     }
   }
 };

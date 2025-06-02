@@ -14,6 +14,7 @@ import { Search } from "lucide-react";
 interface FilterSectionProps {
   onFilterChange: (filters: FilterState) => void;
   onClearFilters: () => void;
+  onSellRentSubmit: (type: "sell" | "rent-your-property") => void;
 }
 
 export interface FilterState {
@@ -23,9 +24,9 @@ export interface FilterState {
   budget: string;
 }
 
-const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFilters }) => {
+const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFilters, onSellRentSubmit }) => {
   const [filters, setFilters] = useState<FilterState>({
-    lookingFor: "",
+    lookingFor: "rent",
     propertyType: "",
     location: "",
     budget: ""
@@ -34,12 +35,18 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFi
   const handleFilterChange = (key: keyof FilterState, value: string) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
+    
+    if (key === "lookingFor" && (value === "sell" || value === "rent-your-property")) {
+      onSellRentSubmit(value);
+      return;
+    }
+    
     onFilterChange(newFilters);
   };
 
   const handleClearFilters = () => {
     const emptyFilters = {
-      lookingFor: "",
+      lookingFor: "rent",
       propertyType: "",
       location: "",
       budget: ""
@@ -56,11 +63,11 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFi
             <div className="text-xs font-semibold text-gray-700 mb-1">Looking For</div>
             <Select onValueChange={(value) => handleFilterChange("lookingFor", value)} value={filters.lookingFor}>
               <SelectTrigger className="border-0 p-0 h-auto text-sm font-medium">
-                <SelectValue placeholder="Select option" />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="buy">Buy</SelectItem>
                 <SelectItem value="rent">Rent</SelectItem>
+                <SelectItem value="buy">Buy</SelectItem>
                 <SelectItem value="sell">Sell</SelectItem>
                 <SelectItem value="rent-your-property">Rent Your Property</SelectItem>
               </SelectContent>
@@ -68,7 +75,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFi
           </div>
         </div>
 
-        {(filters.lookingFor === "buy" || filters.lookingFor === "rent") && (
+        {(filters.lookingFor === "rent" || filters.lookingFor === "buy") && (
           <>
             <div className="flex-1 min-w-0">
               <div className="px-4 py-3 border-r border-gray-200">

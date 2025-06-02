@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { X, Upload, Image as ImageIcon, Video } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface PropertyFormProps {
   onSubmit: (property: any) => void;
@@ -19,37 +20,35 @@ interface PropertyFormProps {
 }
 
 const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) => {
+  const { token } = useAuth();
   const [formData, setFormData] = useState({
-    title: "",
     location: "",
+    area: "",
     price: "",
     bedrooms: "",
     bathrooms: "",
-    area: "",
-    propertyType: "",
-    latitude: "",
-    longitude: ""
+    squareFootage: "",
+    propertyType: ""
   });
 
   const [images, setImages] = useState<File[]>([]);
   const [video, setVideo] = useState<File | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     const validationErrors: string[] = [];
     
     // Validate required fields
-    if (!formData.title) validationErrors.push("Title is required");
     if (!formData.location) validationErrors.push("Location is required");
+    if (!formData.area) validationErrors.push("Area is required");
     if (!formData.price) validationErrors.push("Price is required");
     if (!formData.bedrooms) validationErrors.push("Bedrooms is required");
     if (!formData.bathrooms) validationErrors.push("Bathrooms is required");
-    if (!formData.area) validationErrors.push("Area is required");
+    if (!formData.squareFootage) validationErrors.push("Square footage is required");
     if (!formData.propertyType) validationErrors.push("Property type is required");
-    if (!formData.latitude) validationErrors.push("Latitude is required");
-    if (!formData.longitude) validationErrors.push("Longitude is required");
     
     // Validate file uploads
     if (images.length < 5) validationErrors.push("At least 5 images are required");
@@ -60,32 +59,53 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
       setErrors(validationErrors);
       return;
     }
-    
-    // Create property with file data
-    const newProperty = {
-      id: Date.now(),
-      title: formData.title,
-      location: formData.location,
-      price: type === "rent-your-property" ? `₹${formData.price}/month` : `₹${formData.price}`,
-      bedrooms: parseInt(formData.bedrooms),
-      bathrooms: parseInt(formData.bathrooms),
-      area: formData.area,
-      latitude: parseFloat(formData.latitude),
-      longitude: parseFloat(formData.longitude),
-      images: images,
-      video: video,
-      image: URL.createObjectURL(images[0]), // Use first image as main image
-      agent: {
-        name: "Property Owner",
-        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
-      },
-      featured: false,
-      type: formData.propertyType,
-      listingType: type === "rent-your-property" ? "rent" : "buy"
-    };
 
-    onSubmit(newProperty);
-    onClose();
+    setLoading(true);
+    
+    try {
+      // Create FormData for file upload
+      const formDataToSend = new FormData();
+      formDataToSend.append('location', formData.location);
+      formDataToSend.append('area', formData.area);
+      formDataToSend.append('price', formData.price);
+      formDataToSend.append('bedrooms', formData.bedrooms);
+      formDataToSend.append('bathrooms', formData.bathrooms);
+      formDataToSend.append('squareFootage', formData.squareFootage);
+      formDataToSend.append('propertyType', formData.propertyType);
+      formDataToSend.append('listingType', type === "rent-your-property" ? "rent" : "buy");
+      
+      // Add images
+      images.forEach((image) => {
+        formDataToSend.append('images', image);
+      });
+      
+      // Add video
+      if (video) {
+        formDataToSend.append('video', video);
+      }
+
+      const response = await fetch('http://localhost:3001/api/properties', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formDataToSend,
+      });
+
+      if (response.ok) {
+        const newProperty = await response.json();
+        onSubmit(newProperty);
+        onClose();
+      } else {
+        const errorData = await response.json();
+        setErrors([errorData.error || 'Failed to create property']);
+      }
+    } catch (error) {
+      console.error('Error submitting property:', error);
+      setErrors(['Network error. Please try again.']);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (field: string, value: string) => {
@@ -110,7 +130,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
       <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>
-            {type === "sell" ? "Sell Your Property" : "Rent Your Property"}
+            {type === "sell" ? "Sell Property" : "Rent Property"}
           </CardTitle>
           <Button variant="ghost" size="sm" onClick={onClose}>
             <X className="h-4 w-4" />
@@ -131,16 +151,30 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Property Title <span className="text-red-500">*</span>
+                  Location <span className="text-red-500">*</span>
                 </label>
                 <Input
                   required
-                  value={formData.title}
-                  onChange={(e) => handleChange("title", e.target.value)}
-                  placeholder="Enter property title"
+                  value={formData.location}
+                  onChange={(e) => handleChange("location", e.target.value)}
+                  placeholder="Enter location"
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Area <span className="text-red-500">*</span>
+                </label>
+                <Input
+                  required
+                  value={formData.area}
+                  onChange={(e) => handleChange("area", e.target.value)}
+                  placeholder="Enter area/locality"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Property Type <span className="text-red-500">*</span>
@@ -157,61 +191,19 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
                   </SelectContent>
                 </Select>
               </div>
-            </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Location <span className="text-red-500">*</span>
-              </label>
-              <Input
-                required
-                value={formData.location}
-                onChange={(e) => handleChange("location", e.target.value)}
-                placeholder="Enter location"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Latitude <span className="text-red-500">*</span>
+                  Price <span className="text-red-500">*</span>
                 </label>
                 <Input
                   required
                   type="number"
-                  step="any"
-                  value={formData.latitude}
-                  onChange={(e) => handleChange("latitude", e.target.value)}
-                  placeholder="e.g., 11.9416"
+                  value={formData.price}
+                  onChange={(e) => handleChange("price", e.target.value)}
+                  placeholder={type === "rent-your-property" ? "Monthly rent" : "Selling price"}
                 />
               </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Longitude <span className="text-red-500">*</span>
-                </label>
-                <Input
-                  required
-                  type="number"
-                  step="any"
-                  value={formData.longitude}
-                  onChange={(e) => handleChange("longitude", e.target.value)}
-                  placeholder="e.g., 79.8083"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Price <span className="text-red-500">*</span>
-              </label>
-              <Input
-                required
-                type="number"
-                value={formData.price}
-                onChange={(e) => handleChange("price", e.target.value)}
-                placeholder={type === "rent-your-property" ? "Monthly rent" : "Selling price"}
-              />
             </div>
 
             <div className="grid grid-cols-3 gap-4">
@@ -243,12 +235,12 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
 
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Area <span className="text-red-500">*</span>
+                  Square Footage <span className="text-red-500">*</span>
                 </label>
                 <Input
                   required
-                  value={formData.area}
-                  onChange={(e) => handleChange("area", e.target.value)}
+                  value={formData.squareFootage}
+                  onChange={(e) => handleChange("squareFootage", e.target.value)}
                   placeholder="1200 sq ft"
                 />
               </div>
@@ -306,8 +298,12 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
               </div>
             </div>
 
-            <Button type="submit" className="w-full bg-teal-500 hover:bg-teal-600">
-              Submit Property
+            <Button 
+              type="submit" 
+              className="w-full bg-teal-500 hover:bg-teal-600"
+              disabled={loading}
+            >
+              {loading ? 'Submitting...' : 'Submit Property'}
             </Button>
           </form>
         </CardContent>

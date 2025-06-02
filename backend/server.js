@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const path = require('path');
 const fs = require('fs');
 
@@ -31,29 +33,60 @@ mongoose.connect('mongodb://localhost:27017/propertydb', {
   console.error('MongoDB connection error:', error);
 });
 
+// User Schema
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  phone: { type: String },
+  createdAt: { type: Date, default: Date.now }
+});
+
+const User = mongoose.model('User', userSchema);
+
 // Property Schema
 const propertySchema = new mongoose.Schema({
-  title: { type: String, required: true },
   location: { type: String, required: true },
+  area: { type: String, required: true },
   price: { type: String, required: true },
   bedrooms: { type: Number, required: true },
   bathrooms: { type: Number, required: true },
-  area: { type: String, required: true },
-  latitude: { type: Number },
-  longitude: { type: Number },
+  squareFootage: { type: String, required: true },
   images: [String],
   video: String,
   propertyType: { type: String, required: true },
-  listingType: { type: String, enum: ['buy', 'rent', 'sell'], required: true },
+  listingType: { type: String, enum: ['buy', 'rent'], required: true },
+  status: { type: String, enum: ['available', 'sold', 'rented'], default: 'available' },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   agent: {
     name: { type: String, default: 'Property Owner' },
     image: { type: String, default: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80' }
   },
-  featured: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 });
 
 const Property = mongoose.model('Property', propertySchema);
+
+// JWT Secret
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+
+// Authentication middleware
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Access token required' });
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: 'Invalid token' });
+    }
+    req.user = user;
+    next();
+  });
+};
 
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
@@ -94,22 +127,122 @@ const upload = multer({
   }
 });
 
-// Routes
+// Auth Routes
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    const { name, email, password, phone } = req.body;
 
-// Get all properties
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create user
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword,
+      phone
+    });
+
+    await user.save();
+
+    // Generate token
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    res.status(201).json({
+      message: 'User created successfully',
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find user
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid credentials' });
+    }
+
+    // Check password
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+      return res.status(400).json({ error: 'Invalid credentials' });
+    }
+
+    // Generate token
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    res.json({
+      message: 'Login successful',
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/auth/profile', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('-password');
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Property Routes
 app.get('/api/properties', async (req, res) => {
   try {
-    const properties = await Property.find().sort({ createdAt: -1 });
+    const { status = 'available' } = req.query;
+    const properties = await Property.find({ status }).populate('owner', 'name email').sort({ createdAt: -1 });
     res.json(properties);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Get property by ID
+app.get('/api/properties/user/:userId', authenticateToken, async (req, res) => {
+  try {
+    const properties = await Property.find({ owner: req.params.userId }).sort({ createdAt: -1 });
+    res.json(properties);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get('/api/properties/:id', async (req, res) => {
   try {
-    const property = await Property.findById(req.params.id);
+    const property = await Property.findById(req.params.id).populate('owner', 'name email phone');
     if (!property) {
       return res.status(404).json({ error: 'Property not found' });
     }
@@ -119,27 +252,24 @@ app.get('/api/properties/:id', async (req, res) => {
   }
 });
 
-// Create new property
-app.post('/api/properties', upload.fields([
+app.post('/api/properties', authenticateToken, upload.fields([
   { name: 'images', maxCount: 7 },
   { name: 'video', maxCount: 1 }
 ]), async (req, res) => {
   try {
     const {
-      title,
       location,
+      area,
       price,
       bedrooms,
       bathrooms,
-      area,
-      latitude,
-      longitude,
+      squareFootage,
       propertyType,
       listingType
     } = req.body;
 
     // Validate required fields
-    if (!title || !location || !price || !bedrooms || !bathrooms || !area || !propertyType || !listingType) {
+    if (!location || !area || !price || !bedrooms || !bathrooms || !squareFootage || !propertyType || !listingType) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -157,18 +287,17 @@ app.post('/api/properties', upload.fields([
     const videoPath = `/uploads/videos/${req.files.video[0].filename}`;
 
     const property = new Property({
-      title,
       location,
+      area,
       price,
       bedrooms: parseInt(bedrooms),
       bathrooms: parseInt(bathrooms),
-      area,
-      latitude: latitude ? parseFloat(latitude) : undefined,
-      longitude: longitude ? parseFloat(longitude) : undefined,
+      squareFootage,
       images: imagePaths,
       video: videoPath,
       propertyType,
       listingType,
+      owner: req.user.userId,
       agent: {
         name: 'Property Owner',
         image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80'
@@ -183,55 +312,22 @@ app.post('/api/properties', upload.fields([
   }
 });
 
-// Filter properties
-app.get('/api/properties/filter', async (req, res) => {
+app.put('/api/properties/:id/status', authenticateToken, async (req, res) => {
   try {
-    const { lookingFor, propertyType, location, budget } = req.query;
-    
-    let filter = {};
-    
-    if (lookingFor && (lookingFor === 'buy' || lookingFor === 'rent')) {
-      filter.listingType = lookingFor;
-    }
-    
-    if (propertyType) {
-      filter.propertyType = propertyType;
-    }
-    
-    if (location) {
-      filter.location = { $regex: location, $options: 'i' };
-    }
-    
-    const properties = await Property.find(filter).sort({ createdAt: -1 });
-    
-    // Filter by budget if provided
-    let filteredProperties = properties;
-    if (budget) {
-      const budgetNum = parseInt(budget.toString().replace(/[^\d]/g, ''));
-      filteredProperties = properties.filter(property => {
-        const priceNum = parseInt(property.price.replace(/[^\d]/g, ''));
-        return priceNum <= budgetNum;
-      });
-    }
-    
-    res.json(filteredProperties);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Update property
-app.put('/api/properties/:id', async (req, res) => {
-  try {
-    const property = await Property.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const { status } = req.body;
+    const property = await Property.findById(req.params.id);
     
     if (!property) {
       return res.status(404).json({ error: 'Property not found' });
     }
+    
+    // Check if user owns the property
+    if (property.owner.toString() !== req.user.userId) {
+      return res.status(403).json({ error: 'Not authorized to update this property' });
+    }
+    
+    property.status = status;
+    await property.save();
     
     res.json(property);
   } catch (error) {
@@ -239,13 +335,17 @@ app.put('/api/properties/:id', async (req, res) => {
   }
 });
 
-// Delete property
-app.delete('/api/properties/:id', async (req, res) => {
+app.delete('/api/properties/:id', authenticateToken, async (req, res) => {
   try {
-    const property = await Property.findByIdAndDelete(req.params.id);
+    const property = await Property.findById(req.params.id);
     
     if (!property) {
       return res.status(404).json({ error: 'Property not found' });
+    }
+    
+    // Check if user owns the property
+    if (property.owner.toString() !== req.user.userId) {
+      return res.status(403).json({ error: 'Not authorized to delete this property' });
     }
     
     // Delete associated files
@@ -265,10 +365,62 @@ app.delete('/api/properties/:id', async (req, res) => {
       }
     }
     
+    await Property.findByIdAndDelete(req.params.id);
     res.json({ message: 'Property deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+// Filter properties
+app.get('/api/properties/filter', async (req, res) => {
+  try {
+    const { lookingFor, propertyType, location, budget } = req.query;
+    
+    let filter = { status: 'available' };
+    
+    if (lookingFor && (lookingFor === 'buy' || lookingFor === 'rent')) {
+      filter.listingType = lookingFor;
+    }
+    
+    if (propertyType && propertyType !== 'any') {
+      filter.propertyType = propertyType;
+    }
+    
+    if (location) {
+      filter.$or = [
+        { location: { $regex: location, $options: 'i' } },
+        { area: { $regex: location, $options: 'i' } }
+      ];
+    }
+    
+    const properties = await Property.find(filter).populate('owner', 'name email').sort({ createdAt: -1 });
+    
+    // Filter by budget if provided
+    let filteredProperties = properties;
+    if (budget) {
+      const budgetNum = parseInt(budget.toString().replace(/[^\d]/g, ''));
+      filteredProperties = properties.filter(property => {
+        const priceNum = parseInt(property.price.replace(/[^\d]/g, ''));
+        return priceNum <= budgetNum;
+      });
+    }
+    
+    res.json(filteredProperties);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Footer content endpoint
+app.get('/api/footer', (req, res) => {
+  res.json({
+    copyright: '© 2025 Pondy. All rights reserved.',
+    links: [
+      { name: 'Privacy Policy', url: '/privacy' },
+      { name: 'Terms of Service', url: '/terms' }
+    ]
+  });
 });
 
 // Error handling middleware
