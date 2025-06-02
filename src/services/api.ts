@@ -6,12 +6,14 @@ const API_BASE_URL = process.env.NODE_ENV === 'production'
 export interface Property {
   _id?: string;
   id?: number;
+  title: string;
   location: string;
   area: string;
   price: string;
   bedrooms: number;
   bathrooms: number;
   squareFootage: string;
+  image: string;
   images?: File[] | string[];
   video?: File | string;
   agent: {

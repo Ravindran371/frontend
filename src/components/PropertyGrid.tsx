@@ -1,24 +1,7 @@
 
 import React from "react";
 import PropertyCard from "./PropertyCard";
-
-interface Property {
-  id: number;
-  title: string;
-  location: string;
-  price: string;
-  bedrooms: number;
-  bathrooms: number;
-  area: string;
-  image: string;
-  agent: {
-    name: string;
-    image: string;
-  };
-  featured: boolean;
-  type: string;
-  listingType: "buy" | "rent" | "sell";
-}
+import { Property } from "@/services/api";
 
 interface PropertyGridProps {
   properties: Property[];
@@ -37,7 +20,7 @@ const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {properties.map((property) => (
-        <PropertyCard key={property.id} property={property} />
+        <PropertyCard key={property.id || property._id} property={property} />
       ))}
     </div>
   );

@@ -2,22 +2,7 @@
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-
-interface Property {
-  id: number;
-  title: string;
-  location: string;
-  price: string;
-  bedrooms: number;
-  bathrooms: number;
-  area: string;
-  image: string;
-  agent: {
-    name: string;
-    image: string;
-  };
-  featured: boolean;
-}
+import { Property } from "@/services/api";
 
 interface PropertyCardProps {
   property: Property;
@@ -28,7 +13,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/properties/${property.id}`);
+    navigate(`/properties/${property.id || property._id}`);
   };
 
   const handleLikeClick = (e: React.MouseEvent) => {
@@ -44,14 +29,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
       <div className="relative">
         <img 
           src={property.image} 
-          alt={property.title} 
+          alt={`${property.type} in ${property.location}`} 
           className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        {property.featured && (
-          <div className="absolute top-4 left-4 bg-blue-600 text-white px-2 py-1 text-xs rounded">
-            Featured
-          </div>
-        )}
         <div 
           className="absolute top-4 right-4 bg-white rounded-full p-2 cursor-pointer hover:bg-gray-100 transition-colors z-10"
           onClick={handleLikeClick}
@@ -68,7 +48,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
         </div>
       </div>
       <CardContent className="pt-4 group-hover:bg-gray-50 transition-colors">
-        <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">{property.title}</h3>
+        <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
+          {property.type} in {property.location}
+        </h3>
         <p className="text-gray-600 text-sm mb-3 flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -96,7 +78,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" />
               </svg>
-              {property.area}
+              {property.squareFootage}
             </div>
           </div>
         </div>

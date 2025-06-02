@@ -29,7 +29,7 @@ const PropertyDetails: React.FC = () => {
   useEffect(() => {
     const fetchProperty = async () => {
       if (id) {
-        const propertyData = await apiService.getPropertyById(parseInt(id));
+        const propertyData = await apiService.getPropertyById(id);
         setProperty(propertyData);
       }
       setLoading(false);
@@ -78,10 +78,10 @@ const PropertyDetails: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           {/* Property Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">{property.title}</h1>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">{property.type} in {property.location}</h1>
             <div className="flex items-center text-gray-600 mb-4">
               <MapPin className="h-5 w-5 mr-2" />
-              <span>{property.location}</span>
+              <span>{property.location}, {property.area}</span>
             </div>
             <div className="text-2xl font-bold text-teal-600">{property.price}</div>
           </div>
@@ -94,7 +94,7 @@ const PropertyDetails: React.FC = () => {
                 <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
                   <img
                     src={property.image}
-                    alt={property.title}
+                    alt={`${property.type} in ${property.location}`}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -132,7 +132,7 @@ const PropertyDetails: React.FC = () => {
                     </div>
                     <div className="flex items-center">
                       <Square className="h-5 w-5 text-teal-500 mr-2" />
-                      <span>{property.area}</span>
+                      <span>{property.squareFootage}</span>
                     </div>
                   </div>
                   
@@ -141,7 +141,7 @@ const PropertyDetails: React.FC = () => {
                       <h3 className="font-semibold mb-2">Description</h3>
                       <p className="text-gray-600">
                         This beautiful {property.type} offers modern living with excellent amenities. 
-                        Located in {property.location}, it provides easy access to local attractions 
+                        Located in {property.area}, {property.location}, it provides easy access to local attractions 
                         and transportation. Perfect for families or professionals looking for quality accommodation.
                       </p>
                     </div>
@@ -162,24 +162,22 @@ const PropertyDetails: React.FC = () => {
               </Card>
 
               {/* Map Section */}
-              {property.latitude && property.longitude && (
-                <Card>
-                  <CardContent className="p-6">
-                    <h2 className="text-xl font-bold mb-4">Location</h2>
-                    <div className="h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-                      <div className="text-center">
-                        <MapPin className="h-12 w-12 text-teal-500 mx-auto mb-2" />
-                        <p className="text-gray-600">
-                          Map integration coming soon
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          Coordinates: {property.latitude}, {property.longitude}
-                        </p>
-                      </div>
+              <Card>
+                <CardContent className="p-6">
+                  <h2 className="text-xl font-bold mb-4">Location</h2>
+                  <div className="h-64 bg-gray-200 rounded-lg flex items-center justify-center">
+                    <div className="text-center">
+                      <MapPin className="h-12 w-12 text-teal-500 mx-auto mb-2" />
+                      <p className="text-gray-600">
+                        Map integration coming soon
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Location: {property.area}, {property.location}
+                      </p>
                     </div>
-                  </CardContent>
-                </Card>
-              )}
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
             {/* Sidebar */}
@@ -246,7 +244,7 @@ const PropertyDetails: React.FC = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Property ID</span>
-                      <span className="font-medium">#{property.id}</span>
+                      <span className="font-medium">#{property.id || property._id}</span>
                     </div>
                   </div>
                 </CardContent>
