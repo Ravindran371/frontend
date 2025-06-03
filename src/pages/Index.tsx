@@ -6,6 +6,7 @@ import PropertyGrid from "@/components/PropertyGrid";
 import PropertyForm from "@/components/PropertyForm";
 import { apiService, Property } from "@/services/api";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Index: React.FC = () => {
   const [properties, setProperties] = useState<Property[]>([]);
@@ -14,6 +15,7 @@ const Index: React.FC = () => {
   const [propertyFormType, setPropertyFormType] = useState<"sell" | "rent-your-property">("sell");
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -66,7 +68,7 @@ const Index: React.FC = () => {
 
   const handleSellRentSubmit = (type: "sell" | "rent-your-property") => {
     if (!user) {
-      alert('Please sign in to add properties');
+      alert(t('message.signInRequired'));
       return;
     }
     setPropertyFormType(type);
@@ -87,7 +89,7 @@ const Index: React.FC = () => {
       <div className="min-h-screen bg-white">
         <Navigation />
         <div className="container mx-auto px-4 pt-24 pb-8 flex items-center justify-center">
-          <div className="text-lg">Loading properties...</div>
+          <div className="text-lg">{t('message.loadingProperties')}</div>
         </div>
       </div>
     );

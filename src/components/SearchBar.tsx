@@ -10,10 +10,12 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const SearchBar: React.FC = () => {
   const [searchType, setSearchType] = useState("buy");
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleSearch = () => {
     if (searchType === "sell") {
@@ -30,45 +32,45 @@ const SearchBar: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Looking for
+              {t('search.lookingFor')}
             </label>
             <Select defaultValue="buy" onValueChange={(value) => setSearchType(value)}>
               <SelectTrigger className="w-full min-h-[56px] text-base font-medium">
-                <SelectValue placeholder="Select type" />
+                <SelectValue placeholder={t('search.selectType')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="buy">Buy</SelectItem>
-                <SelectItem value="rent">Rent</SelectItem>
-                <SelectItem value="sell">Sell</SelectItem>
+                <SelectItem value="buy">{t('filter.buy')}</SelectItem>
+                <SelectItem value="rent">{t('filter.rent')}</SelectItem>
+                <SelectItem value="sell">{t('filter.sell')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
           
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Location
+              {t('filter.location')}
             </label>
             <Input
               type="text"
-              placeholder="City, Neighborhood"
+              placeholder={t('search.cityNeighborhood')}
               className="w-full min-h-[56px] text-base"
             />
           </div>
           
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Property Type
+              {t('filter.propertyType')}
             </label>
             <Select defaultValue="any">
               <SelectTrigger className="w-full min-h-[56px] text-base font-medium">
-                <SelectValue placeholder="Select type" />
+                <SelectValue placeholder={t('search.selectType')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="any">Any</SelectItem>
-                <SelectItem value="house">House</SelectItem>
-                <SelectItem value="apartment">Apartment</SelectItem>
-                <SelectItem value="villa">Villa</SelectItem>
-                <SelectItem value="plot">Plot</SelectItem>
+                <SelectItem value="any">{t('search.any')}</SelectItem>
+                <SelectItem value="house">{t('property.house')}</SelectItem>
+                <SelectItem value="apartment">{t('property.apartment')}</SelectItem>
+                <SelectItem value="villa">{t('property.villa')}</SelectItem>
+                <SelectItem value="plot">{t('property.plot')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -78,7 +80,7 @@ const SearchBar: React.FC = () => {
           className="w-full bg-orange-500 hover:bg-orange-600 text-white min-h-[56px] text-lg font-semibold rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl"
           onClick={handleSearch}
         >
-          Search Properties
+          {t('search.searchProperties')}
         </Button>
       </div>
     </div>

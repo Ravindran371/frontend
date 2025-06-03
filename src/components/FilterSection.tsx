@@ -10,6 +10,7 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface FilterSectionProps {
   onFilterChange: (filters: FilterState) => void;
@@ -25,6 +26,7 @@ export interface FilterState {
 }
 
 const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFilters, onSellRentSubmit }) => {
+  const { t } = useLanguage();
   const [filters, setFilters] = useState<FilterState>({
     lookingFor: "",
     propertyType: "",
@@ -60,16 +62,16 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFi
       <div className="flex flex-col md:flex-row md:items-center gap-2">
         <div className="flex-1 min-w-0">
           <div className="px-4 py-4 border-b md:border-b-0 md:border-r border-gray-200">
-            <div className="text-xs font-semibold text-gray-700 mb-2">Looking For</div>
+            <div className="text-xs font-semibold text-gray-700 mb-2">{t('filter.lookingFor')}</div>
             <Select onValueChange={(value) => handleFilterChange("lookingFor", value)} value={filters.lookingFor}>
               <SelectTrigger className="border-0 p-0 h-auto text-sm font-medium min-h-[44px]">
-                <SelectValue placeholder="Select" />
+                <SelectValue placeholder={t('filter.select')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="rent">Rent</SelectItem>
-                <SelectItem value="buy">Buy</SelectItem>
-                <SelectItem value="sell">Sell</SelectItem>
-                <SelectItem value="rent-your-property">Rent Your Property</SelectItem>
+                <SelectItem value="rent">{t('filter.rent')}</SelectItem>
+                <SelectItem value="buy">{t('filter.buy')}</SelectItem>
+                <SelectItem value="sell">{t('filter.sell')}</SelectItem>
+                <SelectItem value="rent-your-property">{t('filter.rentYourProperty')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -79,16 +81,16 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFi
           <>
             <div className="flex-1 min-w-0">
               <div className="px-4 py-4 border-b md:border-b-0 md:border-r border-gray-200">
-                <div className="text-xs font-semibold text-gray-700 mb-2">Property Type</div>
+                <div className="text-xs font-semibold text-gray-700 mb-2">{t('filter.propertyType')}</div>
                 <Select onValueChange={(value) => handleFilterChange("propertyType", value)} value={filters.propertyType}>
                   <SelectTrigger className="border-0 p-0 h-auto text-sm font-medium min-h-[44px]">
-                    <SelectValue placeholder="Any type" />
+                    <SelectValue placeholder={t('filter.anyType')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="house">House</SelectItem>
-                    <SelectItem value="apartment">Apartment</SelectItem>
-                    <SelectItem value="villa">Villa</SelectItem>
-                    <SelectItem value="plot">Plot</SelectItem>
+                    <SelectItem value="house">{t('property.house')}</SelectItem>
+                    <SelectItem value="apartment">{t('property.apartment')}</SelectItem>
+                    <SelectItem value="villa">{t('property.villa')}</SelectItem>
+                    <SelectItem value="plot">{t('property.plot')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -96,9 +98,9 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFi
 
             <div className="flex-1 min-w-0">
               <div className="px-4 py-4 border-b md:border-b-0 md:border-r border-gray-200">
-                <div className="text-xs font-semibold text-gray-700 mb-2">Location</div>
+                <div className="text-xs font-semibold text-gray-700 mb-2">{t('filter.location')}</div>
                 <Input 
-                  placeholder="Where?"
+                  placeholder={t('filter.where')}
                   className="border-0 p-0 h-auto text-sm font-medium placeholder:text-gray-400 min-h-[44px]"
                   value={filters.location}
                   onChange={(e) => handleFilterChange("location", e.target.value)}
@@ -108,9 +110,9 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFi
 
             <div className="flex-1 min-w-0">
               <div className="px-4 py-4 border-b md:border-b-0 md:border-r border-gray-200">
-                <div className="text-xs font-semibold text-gray-700 mb-2">Budget</div>
+                <div className="text-xs font-semibold text-gray-700 mb-2">{t('filter.budget')}</div>
                 <Input 
-                  placeholder="Max price"
+                  placeholder={t('filter.maxPrice')}
                   className="border-0 p-0 h-auto text-sm font-medium placeholder:text-gray-400 min-h-[44px]"
                   value={filters.budget}
                   onChange={(e) => handleFilterChange("budget", e.target.value)}
@@ -127,7 +129,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFi
             onClick={handleClearFilters}
             className="text-gray-600 hover:text-gray-800 min-h-[44px] px-4"
           >
-            Clear
+            {t('filter.clear')}
           </Button>
           <Button className="bg-teal-500 hover:bg-teal-600 text-white rounded-full p-4 min-h-[44px] min-w-[44px]">
             <Search className="h-5 w-5" />

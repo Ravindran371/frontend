@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -10,8 +10,10 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { X, Upload, Image as ImageIcon, Video } from "lucide-react";
+import { X, Upload, Image as ImageIcon, Video, Trash2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { toast } from "@/hooks/use-toast";
 
 interface PropertyFormProps {
   onSubmit: (property: any) => void;
@@ -21,14 +23,15 @@ interface PropertyFormProps {
 
 const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) => {
   const { token } = useAuth();
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
-    location: "",
+    propertyType: "",
     address: "",
-    price: "",
+    location: "",
     bedrooms: "",
     bathrooms: "",
-    squareFootage: "",
-    propertyType: ""
+    price: "",
+    squareFootage: ""
   });
 
   const [images, setImages] = useState<File[]>([]);
@@ -36,28 +39,39 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
   const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
+  // Handle Esc key press
+  useEffect(() => {
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, [onClose]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     const validationErrors: string[] = [];
     
     // Validate required fields
-    if (!formData.location) validationErrors.push("Location is required");
-    if (!formData.address) validationErrors.push("Address is required");
-    if (!formData.price) validationErrors.push("Price is required");
-    if (!formData.squareFootage) validationErrors.push("Square footage is required");
-    if (!formData.propertyType) validationErrors.push("Property type is required");
+    if (!formData.propertyType) validationErrors.push(t('validation.propertyTypeRequired'));
+    if (!formData.address) validationErrors.push(t('validation.addressRequired'));
+    if (!formData.location) validationErrors.push(t('validation.locationRequired'));
+    if (!formData.price) validationErrors.push(t('validation.priceRequired'));
+    if (!formData.squareFootage) validationErrors.push(t('validation.squareFootageRequired'));
     
     // Only validate bedrooms and bathrooms if not a plot
     if (formData.propertyType !== "plot") {
-      if (!formData.bedrooms) validationErrors.push("Bedrooms is required");
-      if (!formData.bathrooms) validationErrors.push("Bathrooms is required");
+      if (!formData.bedrooms) validationErrors.push(t('validation.bedroomsRequired'));
+      if (!formData.bathrooms) validationErrors.push(t('validation.bathroomsRequired'));
     }
     
     // Validate file uploads
-    if (images.length < 5) validationErrors.push("At least 5 images are required");
-    if (images.length > 7) validationErrors.push("Maximum 7 images allowed");
-    if (!video) validationErrors.push("Video is required");
+    if (images.length < 5) validationErrors.push(t('validation.imagesRequired'));
+    if (images.length > 7) validationErrors.push(t('validation.maxImages'));
+    if (!video) validationErrors.push(t('validation.videoRequired'));
     
     if (validationErrors.length > 0) {
       setErrors(validationErrors);
@@ -106,14 +120,18 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
       if (response.ok) {
         const newProperty = await response.json();
         onSubmit(newProperty);
+        toast({
+          title: t('message.propertySubmitted'),
+          className: "bg-green-500 text-white border-green-500",
+        });
         onClose();
       } else {
         const errorData = await response.json();
-        setErrors([errorData.error || 'Failed to create property']);
+        setErrors([errorData.error || t('validation.createFailed')]);
       }
     } catch (error) {
       console.error('Error submitting property:', error);
-      setErrors(['Network error. Please try again.']);
+      setErrors([t('validation.networkError')]);
     } finally {
       setLoading(false);
     }
@@ -127,7 +145,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length > 0) {
-      setImages(files);
+      setImages(prev => [...prev, ...files].slice(0, 7)); // Limit to 7 images
       setErrors([]);
     }
   };
@@ -140,6 +158,14 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
     }
   };
 
+  const removeImage = (index: number) => {
+    setImages(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const removeVideo = () => {
+    setVideo(null);
+  };
+
   const isPlot = formData.propertyType === "plot";
 
   return (
@@ -147,7 +173,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
       <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg md:text-xl">
-            {type === "sell" ? "Sell Property" : "Rent Property"}
+            {type === "sell" ? t('form.sellProperty') : t('form.rentProperty')}
           </CardTitle>
           <Button variant="ghost" size="sm" onClick={onClose} className="min-h-[44px] min-w-[44px]">
             <X className="h-4 w-4" />
@@ -165,118 +191,116 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
           )}
           
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Location <span className="text-red-500">*</span>
-                </label>
-                <Input
-                  required
-                  value={formData.location}
-                  onChange={(e) => handleChange("location", e.target.value)}
-                  placeholder="Enter location"
-                  className="min-h-[48px] text-base"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Address <span className="text-red-500">*</span>
-                </label>
-                <Input
-                  required
-                  value={formData.address}
-                  onChange={(e) => handleChange("address", e.target.value)}
-                  placeholder="Enter full address"
-                  className="min-h-[48px] text-base"
-                />
-              </div>
+            {/* Property Type - First */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                {t('form.propertyType')} <span className="text-red-500">*</span>
+              </label>
+              <Select required onValueChange={(value) => handleChange("propertyType", value)} value={formData.propertyType}>
+                <SelectTrigger className="min-h-[48px] text-base">
+                  <SelectValue placeholder={t('form.selectPropertyType')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="house">{t('property.house')}</SelectItem>
+                  <SelectItem value="apartment">{t('property.apartment')}</SelectItem>
+                  <SelectItem value="villa">{t('property.villa')}</SelectItem>
+                  <SelectItem value="plot">{t('property.plot')}</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Property Type <span className="text-red-500">*</span>
-                </label>
-                <Select required onValueChange={(value) => handleChange("propertyType", value)}>
-                  <SelectTrigger className="min-h-[48px] text-base">
-                    <SelectValue placeholder="Select property type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="house">House</SelectItem>
-                    <SelectItem value="apartment">Apartment</SelectItem>
-                    <SelectItem value="villa">Villa</SelectItem>
-                    <SelectItem value="plot">Plot</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Price <span className="text-red-500">*</span>
-                </label>
-                <Input
-                  required
-                  type="number"
-                  value={formData.price}
-                  onChange={(e) => handleChange("price", e.target.value)}
-                  placeholder={type === "rent-your-property" ? "Monthly rent" : "Selling price"}
-                  className="min-h-[48px] text-base"
-                />
-              </div>
+            {/* Address - Second */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                {t('form.address')} <span className="text-red-500">*</span>
+              </label>
+              <Input
+                required
+                value={formData.address}
+                onChange={(e) => handleChange("address", e.target.value)}
+                placeholder={t('form.enterAddress')}
+                className="min-h-[48px] text-base"
+              />
             </div>
 
-            <div className={`grid gap-4 ${isPlot ? 'grid-cols-1' : 'grid-cols-3'}`}>
-              {!isPlot && (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Bedrooms <span className="text-red-500">*</span>
-                    </label>
-                    <Input
-                      required={!isPlot}
-                      type="number"
-                      value={formData.bedrooms}
-                      onChange={(e) => handleChange("bedrooms", e.target.value)}
-                      placeholder="Number"
-                      className="min-h-[48px] text-base"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Bathrooms <span className="text-red-500">*</span>
-                    </label>
-                    <Input
-                      required={!isPlot}
-                      type="number"
-                      value={formData.bathrooms}
-                      onChange={(e) => handleChange("bathrooms", e.target.value)}
-                      placeholder="Number"
-                      className="min-h-[48px] text-base"
-                    />
-                  </div>
-                </>
-              )}
-
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Square Footage <span className="text-red-500">*</span>
-                </label>
-                <Input
-                  required
-                  value={formData.squareFootage}
-                  onChange={(e) => handleChange("squareFootage", e.target.value)}
-                  placeholder="1200 sq ft"
-                  className="min-h-[48px] text-base"
-                />
-              </div>
+            {/* Location - Third */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                {t('form.location')} <span className="text-red-500">*</span>
+              </label>
+              <Input
+                required
+                value={formData.location}
+                onChange={(e) => handleChange("location", e.target.value)}
+                placeholder={t('form.enterLocation')}
+                className="min-h-[48px] text-base"
+              />
             </div>
 
+            {/* Bedrooms and Bathrooms - Fourth and Fifth (only if not plot) */}
+            {!isPlot && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    {t('form.bedrooms')} <span className="text-red-500">*</span>
+                  </label>
+                  <Input
+                    required
+                    value={formData.bedrooms}
+                    onChange={(e) => handleChange("bedrooms", e.target.value)}
+                    placeholder={t('form.number')}
+                    className="min-h-[48px] text-base"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    {t('form.bathrooms')} <span className="text-red-500">*</span>
+                  </label>
+                  <Input
+                    required
+                    value={formData.bathrooms}
+                    onChange={(e) => handleChange("bathrooms", e.target.value)}
+                    placeholder={t('form.number')}
+                    className="min-h-[48px] text-base"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Price - Sixth */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                {t('form.price')} <span className="text-red-500">*</span>
+              </label>
+              <Input
+                required
+                value={formData.price}
+                onChange={(e) => handleChange("price", e.target.value)}
+                placeholder={type === "rent-your-property" ? t('form.monthlyRent') : t('form.sellingPrice')}
+                className="min-h-[48px] text-base"
+              />
+            </div>
+
+            {/* Square Footage */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                {t('form.squareFootage')} <span className="text-red-500">*</span>
+              </label>
+              <Input
+                required
+                value={formData.squareFootage}
+                onChange={(e) => handleChange("squareFootage", e.target.value)}
+                placeholder="1200 sq ft"
+                className="min-h-[48px] text-base"
+              />
+            </div>
+
+            {/* Image Upload - Seventh */}
             <div>
               <label className="block text-sm font-medium mb-3">
-                Property Images <span className="text-red-500">*</span>
-                <span className="text-gray-500 text-xs ml-2">(5-7 images required)</span>
+                {t('form.propertyImages')} <span className="text-red-500">*</span>
+                <span className="text-gray-500 text-xs ml-2">{t('form.imagesRequired')}</span>
               </label>
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                 <ImageIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
@@ -287,30 +311,41 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
                   onChange={handleImageUpload}
                   className="hidden"
                   id="images"
-                  key={images.length}
                 />
                 <label htmlFor="images" className="cursor-pointer">
                   <Button type="button" variant="outline" className="mb-3 min-h-[48px] text-base">
                     <Upload className="h-4 w-4 mr-2" />
-                    Upload Images
+                    {t('form.uploadImages')}
                   </Button>
                 </label>
                 <p className="text-sm text-gray-600">
-                  {images.length > 0 ? `${images.length} image(s) selected` : 'Select 5-7 images'}
+                  {images.length > 0 ? `${images.length} image(s) selected` : t('form.selectImages')}
                 </p>
                 {images.length > 0 && (
-                  <div className="mt-2 text-xs text-gray-500">
+                  <div className="mt-4 space-y-2">
                     {images.map((file, index) => (
-                      <div key={index}>{file.name}</div>
+                      <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                        <span className="text-xs text-gray-600 truncate">{file.name}</span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeImage(index)}
+                          className="h-6 w-6 p-0"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
                     ))}
                   </div>
                 )}
               </div>
             </div>
 
+            {/* Video Upload - Eighth */}
             <div>
               <label className="block text-sm font-medium mb-3">
-                Property Video <span className="text-red-500">*</span>
+                {t('form.propertyVideo')} <span className="text-red-500">*</span>
               </label>
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                 <Video className="h-12 w-12 text-gray-400 mx-auto mb-4" />
@@ -320,17 +355,32 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
                   onChange={handleVideoUpload}
                   className="hidden"
                   id="video"
-                  key={video?.name}
                 />
                 <label htmlFor="video" className="cursor-pointer">
                   <Button type="button" variant="outline" className="mb-3 min-h-[48px] text-base">
                     <Upload className="h-4 w-4 mr-2" />
-                    Upload Video
+                    {t('form.uploadVideo')}
                   </Button>
                 </label>
                 <p className="text-sm text-gray-600">
-                  {video ? video.name : 'Select a video file'}
+                  {video ? video.name : t('form.selectVideo')}
                 </p>
+                {video && (
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                      <span className="text-xs text-gray-600 truncate">{video.name}</span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={removeVideo}
+                        className="h-6 w-6 p-0"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -339,7 +389,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
               className="w-full bg-teal-500 hover:bg-teal-600 min-h-[56px] text-lg font-medium"
               disabled={loading}
             >
-              {loading ? 'Submitting...' : 'Submit Property'}
+              {loading ? t('form.submitting') : t('form.submitProperty')}
             </Button>
           </form>
         </CardContent>

@@ -1,6 +1,5 @@
 
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+import React from "react";
 import { Globe } from "lucide-react";
 import {
   Select,
@@ -9,13 +8,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const LanguageToggle: React.FC = () => {
-  const [language, setLanguage] = useState("en");
+  const { language, setLanguage } = useLanguage();
 
   const handleLanguageChange = (value: string) => {
-    setLanguage(value);
-    // Here you would implement actual language switching logic
+    setLanguage(value as 'en' | 'fr');
     console.log("Language changed to:", value);
   };
 
