@@ -60,54 +60,44 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
     setLoading(true);
     
     try {
-      // Create FormData for file upload
-      const formDataToSend = new FormData();
-      formDataToSend.append('location', formData.location);
-      formDataToSend.append('area', formData.address);
-      formDataToSend.append('price', formData.price);
-      formDataToSend.append('squareFootage', formData.squareFootage);
-      formDataToSend.append('propertyType', formData.propertyType);
-      formDataToSend.append('listingType', type === "rent-your-property" ? "rent" : "buy");
-      
-      // Only add bedrooms and bathrooms if not a plot
-      if (formData.propertyType !== "plot") {
-        formDataToSend.append('bedrooms', formData.bedrooms);
-        formDataToSend.append('bathrooms', formData.bathrooms);
-      } else {
-        formDataToSend.append('bedrooms', '0');
-        formDataToSend.append('bathrooms', '0');
-      }
-      
-      // Add images
-      images.forEach((image) => {
-        formDataToSend.append('images', image);
-      });
-      
-      // Add video
-      if (video) {
-        formDataToSend.append('video', video);
-      }
-
-      const response = await fetch('http://localhost:3001/api/properties', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
+      // Create a mock property object for immediate display
+      const mockProperty = {
+        id: Date.now(),
+        title: `${formData.propertyType} in ${formData.location}`,
+        location: formData.location,
+        area: formData.address,
+        price: `₹${formData.price}`,
+        bedrooms: parseInt(formData.bedrooms) || 0,
+        bathrooms: parseInt(formData.bathrooms) || 0,
+        squareFootage: formData.squareFootage,
+        image: images.length > 0 ? URL.createObjectURL(images[0]) : "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+        images: images.map(img => URL.createObjectURL(img)),
+        video: video ? URL.createObjectURL(video) : undefined,
+        agent: {
+          name: "Property Owner",
+          image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
         },
-        body: formDataToSend,
-      });
+        featured: false,
+        type: formData.propertyType,
+        listingType: type === "rent-your-property" ? "rent" : "buy" as const,
+        status: "available" as const,
+        createdAt: new Date().toISOString()
+      };
 
-      if (response.ok) {
-        const newProperty = await response.json();
-        onSubmit(newProperty);
-        toast({
-          title: t('message.propertySubmitted'),
-          className: "bg-green-500 text-white border-green-500",
-        });
-        onClose();
-      } else {
-        const errorData = await response.json();
-        setErrors([errorData.error || t('validation.createFailed')]);
-      }
+      // Add to the property list immediately
+      onSubmit(mockProperty);
+      
+      toast({
+        title: t('message.propertySubmitted'),
+        description: "Your property has been added successfully!",
+        className: "bg-green-500 text-white border-green-500",
+      });
+      
+      onClose();
+
+      // In a real app, you would also send to backend here
+      console.log('Property submitted:', mockProperty);
+      
     } catch (error) {
       console.error('Error submitting property:', error);
       setErrors([t('validation.networkError')]);
@@ -124,8 +114,10 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length > 0) {
-      setImages(prev => [...prev, ...files].slice(0, 7)); // Limit to 7 images
+      const newImages = [...images, ...files].slice(0, 7); // Limit to 7 images
+      setImages(newImages);
       setErrors([]);
+      console.log('Images uploaded:', newImages.length);
     }
   };
 
@@ -134,6 +126,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
     if (file) {
       setVideo(file);
       setErrors([]);
+      console.log('Video uploaded:', file.name);
     }
   };
 
