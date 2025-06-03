@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 import { 
   Select,
   SelectContent,
@@ -77,9 +78,10 @@ const SearchBar: React.FC = () => {
         </div>
         
         <Button 
-          className="w-full bg-orange-500 hover:bg-orange-600 text-white min-h-[56px] text-lg font-semibold rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl"
+          className="w-full bg-orange-500 hover:bg-orange-600 text-white min-h-[64px] text-lg font-semibold rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl px-8 py-4"
           onClick={handleSearch}
         >
+          <Search className="mr-3 h-5 w-5" />
           {t('search.searchProperties')}
         </Button>
       </div>
