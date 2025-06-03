@@ -1,19 +1,14 @@
 
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { X, Upload, Image as ImageIcon, Video, Trash2 } from "lucide-react";
+import { X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/hooks/use-toast";
+import PropertyFormFields from "./PropertyFormFields";
+import FileUploadSection from "./FileUploadSection";
+import { usePropertyFormValidation } from "./PropertyFormValidation";
 
 interface PropertyFormProps {
   onSubmit: (property: any) => void;
@@ -24,6 +19,8 @@ interface PropertyFormProps {
 const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) => {
   const { token } = useAuth();
   const { t } = useLanguage();
+  const { validateForm } = usePropertyFormValidation();
+  
   const [formData, setFormData] = useState({
     propertyType: "",
     address: "",
@@ -53,25 +50,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const validationErrors: string[] = [];
-    
-    // Validate required fields
-    if (!formData.propertyType) validationErrors.push(t('validation.propertyTypeRequired'));
-    if (!formData.address) validationErrors.push(t('validation.addressRequired'));
-    if (!formData.location) validationErrors.push(t('validation.locationRequired'));
-    if (!formData.price) validationErrors.push(t('validation.priceRequired'));
-    if (!formData.squareFootage) validationErrors.push(t('validation.squareFootageRequired'));
-    
-    // Only validate bedrooms and bathrooms if not a plot
-    if (formData.propertyType !== "plot") {
-      if (!formData.bedrooms) validationErrors.push(t('validation.bedroomsRequired'));
-      if (!formData.bathrooms) validationErrors.push(t('validation.bathroomsRequired'));
-    }
-    
-    // Validate file uploads
-    if (images.length < 5) validationErrors.push(t('validation.imagesRequired'));
-    if (images.length > 7) validationErrors.push(t('validation.maxImages'));
-    if (!video) validationErrors.push(t('validation.videoRequired'));
+    const validationErrors = validateForm(formData, images, video);
     
     if (validationErrors.length > 0) {
       setErrors(validationErrors);
@@ -137,7 +116,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
     }
   };
 
-  const handleChange = (field: string, value: string) => {
+  const handleFieldChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     setErrors([]);
   };
@@ -166,8 +145,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
     setVideo(null);
   };
 
-  const isPlot = formData.propertyType === "plot";
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -191,198 +168,20 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
           )}
           
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Property Type - First */}
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                {t('form.propertyType')} <span className="text-red-500">*</span>
-              </label>
-              <Select required onValueChange={(value) => handleChange("propertyType", value)} value={formData.propertyType}>
-                <SelectTrigger className="min-h-[48px] text-base">
-                  <SelectValue placeholder={t('form.selectPropertyType')} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="house">{t('property.house')}</SelectItem>
-                  <SelectItem value="apartment">{t('property.apartment')}</SelectItem>
-                  <SelectItem value="villa">{t('property.villa')}</SelectItem>
-                  <SelectItem value="plot">{t('property.plot')}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Address - Second */}
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                {t('form.address')} <span className="text-red-500">*</span>
-              </label>
-              <Input
-                required
-                value={formData.address}
-                onChange={(e) => handleChange("address", e.target.value)}
-                placeholder={t('form.enterAddress')}
-                className="min-h-[48px] text-base"
-              />
-            </div>
-
-            {/* Location - Third */}
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                {t('form.location')} <span className="text-red-500">*</span>
-              </label>
-              <Input
-                required
-                value={formData.location}
-                onChange={(e) => handleChange("location", e.target.value)}
-                placeholder={t('form.enterLocation')}
-                className="min-h-[48px] text-base"
-              />
-            </div>
-
-            {/* Bedrooms and Bathrooms - Fourth and Fifth (only if not plot) */}
-            {!isPlot && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    {t('form.bedrooms')} <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    required
-                    value={formData.bedrooms}
-                    onChange={(e) => handleChange("bedrooms", e.target.value)}
-                    placeholder={t('form.number')}
-                    className="min-h-[48px] text-base"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    {t('form.bathrooms')} <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    required
-                    value={formData.bathrooms}
-                    onChange={(e) => handleChange("bathrooms", e.target.value)}
-                    placeholder={t('form.number')}
-                    className="min-h-[48px] text-base"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Price - Sixth */}
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                {t('form.price')} <span className="text-red-500">*</span>
-              </label>
-              <Input
-                required
-                value={formData.price}
-                onChange={(e) => handleChange("price", e.target.value)}
-                placeholder={type === "rent-your-property" ? t('form.monthlyRent') : t('form.sellingPrice')}
-                className="min-h-[48px] text-base"
-              />
-            </div>
-
-            {/* Square Footage */}
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                {t('form.squareFootage')} <span className="text-red-500">*</span>
-              </label>
-              <Input
-                required
-                value={formData.squareFootage}
-                onChange={(e) => handleChange("squareFootage", e.target.value)}
-                placeholder="1200 sq ft"
-                className="min-h-[48px] text-base"
-              />
-            </div>
-
-            {/* Image Upload - Seventh */}
-            <div>
-              <label className="block text-sm font-medium mb-3">
-                {t('form.propertyImages')} <span className="text-red-500">*</span>
-                <span className="text-gray-500 text-xs ml-2">{t('form.imagesRequired')}</span>
-              </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                <ImageIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <input
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                  id="images"
-                />
-                <label htmlFor="images" className="cursor-pointer">
-                  <Button type="button" variant="outline" className="mb-3 min-h-[48px] text-base">
-                    <Upload className="h-4 w-4 mr-2" />
-                    {t('form.uploadImages')}
-                  </Button>
-                </label>
-                <p className="text-sm text-gray-600">
-                  {images.length > 0 ? `${images.length} image(s) selected` : t('form.selectImages')}
-                </p>
-                {images.length > 0 && (
-                  <div className="mt-4 space-y-2">
-                    {images.map((file, index) => (
-                      <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
-                        <span className="text-xs text-gray-600 truncate">{file.name}</span>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeImage(index)}
-                          className="h-6 w-6 p-0"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Video Upload - Eighth */}
-            <div>
-              <label className="block text-sm font-medium mb-3">
-                {t('form.propertyVideo')} <span className="text-red-500">*</span>
-              </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                <Video className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <input
-                  type="file"
-                  accept="video/*"
-                  onChange={handleVideoUpload}
-                  className="hidden"
-                  id="video"
-                />
-                <label htmlFor="video" className="cursor-pointer">
-                  <Button type="button" variant="outline" className="mb-3 min-h-[48px] text-base">
-                    <Upload className="h-4 w-4 mr-2" />
-                    {t('form.uploadVideo')}
-                  </Button>
-                </label>
-                <p className="text-sm text-gray-600">
-                  {video ? video.name : t('form.selectVideo')}
-                </p>
-                {video && (
-                  <div className="mt-4">
-                    <div className="flex items-center justify-between bg-gray-50 p-2 rounded">
-                      <span className="text-xs text-gray-600 truncate">{video.name}</span>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={removeVideo}
-                        className="h-6 w-6 p-0"
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+            <PropertyFormFields 
+              formData={formData}
+              onFieldChange={handleFieldChange}
+              type={type}
+            />
+            
+            <FileUploadSection
+              images={images}
+              video={video}
+              onImageUpload={handleImageUpload}
+              onVideoUpload={handleVideoUpload}
+              onRemoveImage={removeImage}
+              onRemoveVideo={removeVideo}
+            />
 
             <Button 
               type="submit" 
