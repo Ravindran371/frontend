@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { Property } from "@/services/api";
+import { Calendar } from "lucide-react";
 
 interface PropertyCardProps {
   property: Property;
@@ -19,6 +20,18 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setLiked(!liked);
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 1) return '1 day ago';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
+    return date.toLocaleDateString();
   };
 
   return (
@@ -61,41 +74,49 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
 
         <div className="flex justify-between items-center mb-4">
           <span className="text-lg font-bold text-blue-600">{property.price}</span>
-          <div className="flex space-x-4">
-            <div className="flex items-center text-gray-600 text-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
-              {property.bedrooms}
+          {property.type !== 'plot' && (
+            <div className="flex space-x-4">
+              <div className="flex items-center text-gray-600 text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                {property.bedrooms}
+              </div>
+              <div className="flex items-center text-gray-600 text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                {property.bathrooms}
+              </div>
+              <div className="flex items-center text-gray-600 text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" />
+                </svg>
+                {property.squareFootage}
+              </div>
             </div>
-            <div className="flex items-center text-gray-600 text-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              {property.bathrooms}
-            </div>
-            <div className="flex items-center text-gray-600 text-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" />
-              </svg>
-              {property.squareFootage}
-            </div>
-          </div>
+          )}
         </div>
 
-        {property.agent.name && (
-          <div className="border-t pt-3 flex items-center justify-between">
+        {/* Property Owner Info and Upload Date */}
+        <div className="border-t pt-3 space-y-2">
+          <div className="flex items-center justify-between">
             <div className="flex items-center">
               <img
                 src={property.agent.image}
                 alt={property.agent.name}
-                className="h-10 w-10 rounded-full mr-3"
+                className="h-8 w-8 rounded-full mr-2"
               />
-              <span className="text-gray-700 text-sm">{property.agent.name}</span>
+              <span className="text-gray-700 text-sm font-medium">{property.agent.name}</span>
             </div>
-            <div className="text-gray-500 text-sm">2 days ago</div>
+            {property.createdAt && (
+              <div className="flex items-center text-gray-500 text-xs">
+                <Calendar className="h-3 w-3 mr-1" />
+                <span>{formatDate(property.createdAt)}</span>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </CardContent>
     </Card>
   );

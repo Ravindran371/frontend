@@ -28,7 +28,9 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
     bedrooms: "",
     bathrooms: "",
     price: "",
-    squareFootage: ""
+    squareFootage: "",
+    description: "",
+    keyFeatures: ""
   });
 
   const [images, setImages] = useState<File[]>([]);
@@ -70,6 +72,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
         bedrooms: parseInt(formData.bedrooms) || 0,
         bathrooms: parseInt(formData.bathrooms) || 0,
         squareFootage: formData.squareFootage,
+        description: formData.description,
+        keyFeatures: formData.keyFeatures ? formData.keyFeatures.split(',').map(f => f.trim()) : [],
         image: images.length > 0 ? URL.createObjectURL(images[0]) : "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
         images: images.map(img => URL.createObjectURL(img)),
         video: video ? URL.createObjectURL(video) : undefined,

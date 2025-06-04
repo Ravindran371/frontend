@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Footer from "@/components/Footer";
@@ -91,9 +90,21 @@ const PropertyDetails: React.FC = () => {
 
   const getCurrentImage = () => {
     if (property?.images && property.images.length > 0) {
-      return property.images[currentImageIndex];
+      const currentImg = property.images[currentImageIndex];
+      // Handle both string URLs and File objects
+      return typeof currentImg === 'string' ? currentImg : URL.createObjectURL(currentImg);
     }
     return property?.image;
+  };
+
+  const getVideoUrl = () => {
+    if (!property?.video) return null;
+    return typeof property.video === 'string' ? property.video : URL.createObjectURL(property.video);
+  };
+
+  const formatDate = (date: string) => {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(date).toLocaleDateString(undefined, options);
   };
 
   if (loading) {
@@ -161,8 +172,10 @@ const PropertyDetails: React.FC = () => {
               </div>
             </div>
             <div className="text-3xl font-bold text-teal-600">{property.price}</div>
-            <div className="text-sm text-gray-500 mt-1 capitalize">
-              For {property.listingType} • Posted recently
+            <div className="text-sm text-gray-500 mt-1 capitalize flex items-center">
+              <span>For {property.listingType} • </span>
+              <Calendar className="h-4 w-4 mr-1 ml-2" />
+              <span>Posted {property.createdAt ? formatDate(property.createdAt) : 'recently'}</span>
             </div>
           </div>
 
@@ -176,7 +189,7 @@ const PropertyDetails: React.FC = () => {
                     <img
                       src={getCurrentImage()}
                       alt={`${property.type} in ${property.location}`}
-                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                      className="w-full h-full object-contain bg-gray-100"
                     />
                   </div>
                   
@@ -202,61 +215,81 @@ const PropertyDetails: React.FC = () => {
                 </div>
               </Card>
 
+              {/* Property Video */}
+              {property.video && (
+                <Card>
+                  <CardContent className="p-6">
+                    <h2 className="text-xl font-bold mb-4">Property Video</h2>
+                    <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
+                      <video
+                        src={getVideoUrl() || undefined}
+                        className="w-full h-full object-cover"
+                        controls
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
               {/* Property Details */}
               <Card>
                 <CardContent className="p-6">
                   <h2 className="text-2xl font-bold mb-6">Property Details</h2>
                   
                   {/* Key Features */}
-                  <div className="grid grid-cols-3 gap-6 mb-8 p-4 bg-gray-50 rounded-lg">
-                    <div className="text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <Bed className="h-6 w-6 text-teal-500" />
+                  {property.type !== 'plot' && (
+                    <div className="grid grid-cols-3 gap-6 mb-8 p-4 bg-gray-50 rounded-lg">
+                      <div className="text-center">
+                        <div className="flex items-center justify-center mb-2">
+                          <Bed className="h-6 w-6 text-teal-500" />
+                        </div>
+                        <div className="text-2xl font-bold text-gray-800">{property.bedrooms}</div>
+                        <div className="text-sm text-gray-600">Bedrooms</div>
                       </div>
-                      <div className="text-2xl font-bold text-gray-800">{property.bedrooms}</div>
-                      <div className="text-sm text-gray-600">Bedrooms</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <Bath className="h-6 w-6 text-teal-500" />
+                      <div className="text-center">
+                        <div className="flex items-center justify-center mb-2">
+                          <Bath className="h-6 w-6 text-teal-500" />
+                        </div>
+                        <div className="text-2xl font-bold text-gray-800">{property.bathrooms}</div>
+                        <div className="text-sm text-gray-600">Bathrooms</div>
                       </div>
-                      <div className="text-2xl font-bold text-gray-800">{property.bathrooms}</div>
-                      <div className="text-sm text-gray-600">Bathrooms</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <Square className="h-6 w-6 text-teal-500" />
+                      <div className="text-center">
+                        <div className="flex items-center justify-center mb-2">
+                          <Square className="h-6 w-6 text-teal-500" />
+                        </div>
+                        <div className="text-2xl font-bold text-gray-800">{property.squareFootage}</div>
+                        <div className="text-sm text-gray-600">Area</div>
                       </div>
-                      <div className="text-2xl font-bold text-gray-800">{property.squareFootage}</div>
-                      <div className="text-sm text-gray-600">Area</div>
                     </div>
-                  </div>
+                  )}
                   
                   <div className="space-y-6">
                     <div>
                       <h3 className="text-lg font-semibold mb-3 text-gray-800">Description</h3>
                       <p className="text-gray-600 leading-relaxed">
-                        This stunning {property.type} offers modern living with excellent amenities. 
-                        Located in the heart of {property.area}, {property.location}, it provides easy access to local attractions, 
+                        {property.description || `This stunning ${property.type} offers modern living with excellent amenities. 
+                        Located in the heart of ${property.area}, ${property.location}, it provides easy access to local attractions, 
                         shopping centers, schools, and transportation hubs. Perfect for families or professionals 
-                        looking for quality accommodation in a prime location.
+                        looking for quality accommodation in a prime location.`}
                       </p>
                     </div>
                     
-                    <div>
-                      <h3 className="text-lg font-semibold mb-3 text-gray-800">Key Features</h3>
-                      <div className="grid grid-cols-2 gap-3">
-                        {[
-                          "Modern Kitchen", "Parking Space", "Security System", "Garden/Balcony",
-                          "Near Schools", "Public Transport", "Shopping Nearby", "Gym Access"
-                        ].map((feature, index) => (
-                          <div key={index} className="flex items-center text-gray-600">
-                            <div className="w-2 h-2 bg-teal-500 rounded-full mr-3"></div>
-                            {feature}
-                          </div>
-                        ))}
+                    {property.type !== 'plot' && property.keyFeatures && (
+                      <div>
+                        <h3 className="text-lg font-semibold mb-3 text-gray-800">Key Features</h3>
+                        <div className="grid grid-cols-2 gap-3">
+                          {(property.keyFeatures || [
+                            "Modern Kitchen", "Parking Space", "Security System", "Garden/Balcony",
+                            "Near Schools", "Public Transport", "Shopping Nearby", "Gym Access"
+                          ]).map((feature, index) => (
+                            <div key={index} className="flex items-center text-gray-600">
+                              <div className="w-2 h-2 bg-teal-500 rounded-full mr-3"></div>
+                              {feature}
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -264,50 +297,54 @@ const PropertyDetails: React.FC = () => {
               {/* Map Section */}
               <Card>
                 <CardContent className="p-6">
-                  <h2 className="text-xl font-bold mb-4">Location & Neighborhood</h2>
-                  <div className="h-64 bg-gradient-to-br from-teal-50 to-blue-50 rounded-lg flex items-center justify-center border-2 border-dashed border-teal-200">
-                    <div className="text-center">
-                      <MapPin className="h-12 w-12 text-teal-500 mx-auto mb-3" />
-                      <p className="text-gray-600 font-medium mb-1">
-                        Interactive Map Coming Soon
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {property.area}, {property.location}
-                      </p>
+                  <h2 className="text-xl font-bold mb-4">Location & Map</h2>
+                  <div className="h-80 bg-gray-100 rounded-lg overflow-hidden">
+                    <iframe
+                      src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dO0X1tIJ4QqG7Q&q=${encodeURIComponent(property.area + ', ' + property.location)}`}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className="rounded-lg"
+                    />
+                  </div>
+                  <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <div className="flex items-center text-gray-600">
+                      <MapPin className="h-5 w-5 mr-2 text-teal-500" />
+                      <span className="font-medium">{property.area}, {property.location}</span>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Sidebar */}
+            {/* Sidebar - Owner Space */}
             <div className="space-y-6">
-              {/* Agent Info */}
-              <Card className="sticky top-24">
+              {/* Owner Info */}
+              <Card>
                 <CardContent className="p-6">
-                  <div className="flex items-center mb-6">
+                  <h3 className="text-lg font-semibold mb-4">Property Owner</h3>
+                  <div className="flex items-center mb-4">
                     <img
                       src={property.agent.image}
                       alt={property.agent.name}
                       className="w-16 h-16 rounded-full mr-4 border-2 border-teal-100"
                     />
                     <div>
-                      <h3 className="font-semibold text-lg">{property.agent.name}</h3>
-                      <p className="text-sm text-gray-600">Licensed Property Agent</p>
-                      <div className="flex items-center mt-1">
-                        <div className="flex text-yellow-400 text-sm">
-                          ★★★★★
+                      <h4 className="font-semibold text-lg">{property.agent.name}</h4>
+                      <p className="text-sm text-gray-600">Property Owner</p>
+                      {property.createdAt && (
+                        <div className="flex items-center mt-1 text-xs text-gray-500">
+                          <Calendar className="h-3 w-3 mr-1" />
+                          <span>Listed {formatDate(property.createdAt)}</span>
                         </div>
-                        <span className="text-xs text-gray-500 ml-2">4.9 (127 reviews)</span>
-                      </div>
+                      )}
                     </div>
                   </div>
                   
                   <div className="space-y-3">
-                    <Button className="w-full bg-teal-500 hover:bg-teal-600 h-12">
-                      <Phone className="h-4 w-4 mr-2" />
-                      Call Agent
-                    </Button>
                     <Button variant="outline" className="w-full h-12">
                       <Mail className="h-4 w-4 mr-2" />
                       Send Message
