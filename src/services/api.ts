@@ -13,6 +13,8 @@ export interface Property {
   bedrooms: number;
   bathrooms: number;
   squareFootage: string;
+  description?: string;
+  keyFeatures?: string[];
   image: string;
   images?: File[] | string[];
   video?: File | string;
