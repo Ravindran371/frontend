@@ -23,6 +23,20 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({
 }) => {
   const { t } = useLanguage();
 
+  const handleImageButtonClick = () => {
+    const input = document.getElementById('images') as HTMLInputElement;
+    if (input) {
+      input.click();
+    }
+  };
+
+  const handleVideoButtonClick = () => {
+    const input = document.getElementById('video') as HTMLInputElement;
+    if (input) {
+      input.click();
+    }
+  };
+
   return (
     <>
       {/* Image Upload */}
@@ -42,12 +56,15 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({
             id="images"
             key={`images-${images.length}`}
           />
-          <label htmlFor="images" className="cursor-pointer">
-            <Button type="button" variant="outline" className="mb-3 min-h-[48px] text-base hover:bg-teal-50">
-              <Upload className="h-4 w-4 mr-2" />
-              {t('form.uploadImages')}
-            </Button>
-          </label>
+          <Button 
+            type="button" 
+            variant="outline" 
+            className="mb-3 min-h-[48px] text-base hover:bg-teal-50"
+            onClick={handleImageButtonClick}
+          >
+            <Upload className="h-4 w-4 mr-2" />
+            {t('form.uploadImages')}
+          </Button>
           <p className="text-sm text-gray-600">
             {images.length > 0 ? `${images.length} image(s) selected` : t('form.selectImages')}
           </p>
@@ -96,12 +113,15 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({
             id="video"
             key={`video-${video?.name || 'empty'}`}
           />
-          <label htmlFor="video" className="cursor-pointer">
-            <Button type="button" variant="outline" className="mb-3 min-h-[48px] text-base hover:bg-teal-50">
-              <Upload className="h-4 w-4 mr-2" />
-              {t('form.uploadVideo')}
-            </Button>
-          </label>
+          <Button 
+            type="button" 
+            variant="outline" 
+            className="mb-3 min-h-[48px] text-base hover:bg-teal-50"
+            onClick={handleVideoButtonClick}
+          >
+            <Upload className="h-4 w-4 mr-2" />
+            {t('form.uploadVideo')}
+          </Button>
           <p className="text-sm text-gray-600">
             {video ? video.name : t('form.selectVideo')}
           </p>
