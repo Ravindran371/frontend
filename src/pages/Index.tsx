@@ -17,20 +17,34 @@ const Index: React.FC = () => {
   const { user } = useAuth();
   const { t } = useLanguage();
 
+  // Load properties from localStorage on component mount
   useEffect(() => {
-    const fetchProperties = async () => {
+    const loadProperties = async () => {
       try {
-        const data = await apiService.getProperties();
-        setProperties(data);
-        setFilteredProperties(data);
+        // Get properties from API
+        const apiData = await apiService.getProperties();
+        
+        // Get user-submitted properties from localStorage
+        const storedProperties = localStorage.getItem('userProperties');
+        const userProperties = storedProperties ? JSON.parse(storedProperties) : [];
+        
+        // Combine API data with user properties
+        const allProperties = [...apiData, ...userProperties];
+        setProperties(allProperties);
+        setFilteredProperties(allProperties);
       } catch (error) {
         console.error('Failed to fetch properties:', error);
+        // Load only user properties if API fails
+        const storedProperties = localStorage.getItem('userProperties');
+        const userProperties = storedProperties ? JSON.parse(storedProperties) : [];
+        setProperties(userProperties);
+        setFilteredProperties(userProperties);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProperties();
+    loadProperties();
   }, []);
 
   const handleFilterChange = (filters: FilterState) => {
@@ -77,8 +91,18 @@ const Index: React.FC = () => {
 
   const handlePropertySubmit = async (newProperty: any) => {
     try {
-      setProperties(prev => [...prev, newProperty]);
-      setFilteredProperties(prev => [...prev, newProperty]);
+      // Add to current state
+      const updatedProperties = [...properties, newProperty];
+      setProperties(updatedProperties);
+      setFilteredProperties(updatedProperties);
+      
+      // Save user properties to localStorage
+      const existingUserProperties = localStorage.getItem('userProperties');
+      const userProperties = existingUserProperties ? JSON.parse(existingUserProperties) : [];
+      userProperties.push(newProperty);
+      localStorage.setItem('userProperties', JSON.stringify(userProperties));
+      
+      console.log('Property submitted and saved:', newProperty);
     } catch (error) {
       console.error('Error submitting property:', error);
     }

@@ -35,8 +35,37 @@ const PropertyDetails: React.FC = () => {
   useEffect(() => {
     const fetchProperty = async () => {
       if (id) {
-        const propertyData = await apiService.getPropertyById(id);
-        setProperty(propertyData);
+        try {
+          // First try to get from API
+          let propertyData = await apiService.getPropertyById(id);
+          
+          // If not found in API, check localStorage
+          if (!propertyData) {
+            const storedProperties = localStorage.getItem('userProperties');
+            const userProperties = storedProperties ? JSON.parse(storedProperties) : [];
+            propertyData = userProperties.find((p: Property) => 
+              p.id?.toString() === id || p._id?.toString() === id
+            );
+          }
+          
+          if (propertyData) {
+            setProperty(propertyData);
+            console.log('Property found:', propertyData);
+          } else {
+            console.log('Property not found with ID:', id);
+          }
+        } catch (error) {
+          console.error('Error fetching property:', error);
+          // Fallback to localStorage only
+          const storedProperties = localStorage.getItem('userProperties');
+          const userProperties = storedProperties ? JSON.parse(storedProperties) : [];
+          const propertyData = userProperties.find((p: Property) => 
+            p.id?.toString() === id || p._id?.toString() === id
+          );
+          if (propertyData) {
+            setProperty(propertyData);
+          }
+        }
       }
       setLoading(false);
     };
@@ -45,7 +74,7 @@ const PropertyDetails: React.FC = () => {
   }, [id]);
 
   const nextImage = () => {
-    if (property?.images) {
+    if (property?.images && property.images.length > 1) {
       setCurrentImageIndex((prev) => 
         prev === property.images!.length - 1 ? 0 : prev + 1
       );
@@ -53,11 +82,18 @@ const PropertyDetails: React.FC = () => {
   };
 
   const prevImage = () => {
-    if (property?.images) {
+    if (property?.images && property.images.length > 1) {
       setCurrentImageIndex((prev) => 
         prev === 0 ? property.images!.length - 1 : prev - 1
       );
     }
+  };
+
+  const getCurrentImage = () => {
+    if (property?.images && property.images.length > 0) {
+      return property.images[currentImageIndex];
+    }
+    return property?.image;
   };
 
   if (loading) {
@@ -126,7 +162,7 @@ const PropertyDetails: React.FC = () => {
             </div>
             <div className="text-3xl font-bold text-teal-600">{property.price}</div>
             <div className="text-sm text-gray-500 mt-1 capitalize">
-              For {property.listingType} • Posted 2 days ago
+              For {property.listingType} • Posted recently
             </div>
           </div>
 
@@ -138,7 +174,7 @@ const PropertyDetails: React.FC = () => {
                 <div className="relative">
                   <div className="aspect-video bg-gray-200 overflow-hidden">
                     <img
-                      src={property.image}
+                      src={getCurrentImage()}
                       alt={`${property.type} in ${property.location}`}
                       className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                     />
