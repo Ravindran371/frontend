@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Footer from "@/components/Footer";
@@ -11,13 +12,10 @@ import {
   Bed, 
   Bath, 
   Square, 
-  Phone, 
   Mail, 
-  User,
   ChevronLeft,
   ChevronRight,
   Calendar,
-  Eye,
   Heart,
   Share2,
   Home
@@ -35,10 +33,8 @@ const PropertyDetails: React.FC = () => {
     const fetchProperty = async () => {
       if (id) {
         try {
-          // First try to get from API
           let propertyData = await apiService.getPropertyById(id);
           
-          // If not found in API, check localStorage
           if (!propertyData) {
             const storedProperties = localStorage.getItem('userProperties');
             const userProperties = storedProperties ? JSON.parse(storedProperties) : [];
@@ -55,7 +51,6 @@ const PropertyDetails: React.FC = () => {
           }
         } catch (error) {
           console.error('Error fetching property:', error);
-          // Fallback to localStorage only
           const storedProperties = localStorage.getItem('userProperties');
           const userProperties = storedProperties ? JSON.parse(storedProperties) : [];
           const propertyData = userProperties.find((p: Property) => 
@@ -91,20 +86,20 @@ const PropertyDetails: React.FC = () => {
   const getCurrentImage = () => {
     if (property?.images && property.images.length > 0) {
       const currentImg = property.images[currentImageIndex];
-      // Handle both string URLs and File objects
       return typeof currentImg === 'string' ? currentImg : URL.createObjectURL(currentImg);
     }
     return property?.image;
   };
 
-  const getVideoUrl = () => {
-    if (!property?.video) return null;
-    return typeof property.video === 'string' ? property.video : URL.createObjectURL(property.video);
-  };
-
-  const formatDate = (date: string) => {
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(date).toLocaleDateString(undefined, options);
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   if (loading) {
@@ -189,7 +184,7 @@ const PropertyDetails: React.FC = () => {
                     <img
                       src={getCurrentImage()}
                       alt={`${property.type} in ${property.location}`}
-                      className="w-full h-full object-contain bg-gray-100"
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                     />
                   </div>
                   
@@ -222,7 +217,7 @@ const PropertyDetails: React.FC = () => {
                     <h2 className="text-xl font-bold mb-4">Property Video</h2>
                     <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
                       <video
-                        src={getVideoUrl() || undefined}
+                        src={typeof property.video === 'string' ? property.video : URL.createObjectURL(property.video)}
                         className="w-full h-full object-cover"
                         controls
                       />
@@ -274,14 +269,11 @@ const PropertyDetails: React.FC = () => {
                       </p>
                     </div>
                     
-                    {property.type !== 'plot' && property.keyFeatures && (
+                    {property.type !== 'plot' && property.keyFeatures && property.keyFeatures.length > 0 && (
                       <div>
                         <h3 className="text-lg font-semibold mb-3 text-gray-800">Key Features</h3>
                         <div className="grid grid-cols-2 gap-3">
-                          {(property.keyFeatures || [
-                            "Modern Kitchen", "Parking Space", "Security System", "Garden/Balcony",
-                            "Near Schools", "Public Transport", "Shopping Nearby", "Gym Access"
-                          ]).map((feature, index) => (
+                          {property.keyFeatures.map((feature, index) => (
                             <div key={index} className="flex items-center text-gray-600">
                               <div className="w-2 h-2 bg-teal-500 rounded-full mr-3"></div>
                               {feature}
@@ -293,34 +285,9 @@ const PropertyDetails: React.FC = () => {
                   </div>
                 </CardContent>
               </Card>
-
-              {/* Map Section */}
-              <Card>
-                <CardContent className="p-6">
-                  <h2 className="text-xl font-bold mb-4">Location & Map</h2>
-                  <div className="h-80 bg-gray-100 rounded-lg overflow-hidden">
-                    <iframe
-                      src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dO0X1tIJ4QqG7Q&q=${encodeURIComponent(property.area + ', ' + property.location)}`}
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      className="rounded-lg"
-                    />
-                  </div>
-                  <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <div className="flex items-center text-gray-600">
-                      <MapPin className="h-5 w-5 mr-2 text-teal-500" />
-                      <span className="font-medium">{property.area}, {property.location}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
 
-            {/* Sidebar - Owner Space */}
+            {/* Sidebar */}
             <div className="space-y-6">
               {/* Owner Info */}
               <Card>

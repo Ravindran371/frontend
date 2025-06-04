@@ -52,7 +52,22 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const validationErrors = validateForm(formData, images, video);
+    // Basic validation
+    const validationErrors: string[] = [];
+    
+    if (!formData.propertyType) validationErrors.push("Property type is required");
+    if (!formData.address) validationErrors.push("Address is required");
+    if (!formData.location) validationErrors.push("Location is required");
+    if (!formData.price) validationErrors.push("Price is required");
+    if (!formData.squareFootage) validationErrors.push("Square footage is required");
+    if (!formData.description) validationErrors.push("Description is required");
+    
+    if (formData.propertyType !== "plot") {
+      if (!formData.bedrooms) validationErrors.push("Bedrooms is required");
+      if (!formData.bathrooms) validationErrors.push("Bathrooms is required");
+    }
+    
+    if (images.length === 0) validationErrors.push("At least one image is required");
     
     if (validationErrors.length > 0) {
       setErrors(validationErrors);
@@ -73,7 +88,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
         bathrooms: parseInt(formData.bathrooms) || 0,
         squareFootage: formData.squareFootage,
         description: formData.description,
-        keyFeatures: formData.keyFeatures ? formData.keyFeatures.split(',').map(f => f.trim()) : [],
+        keyFeatures: formData.keyFeatures ? formData.keyFeatures.split(',').map(f => f.trim()).filter(f => f.length > 0) : [],
         image: images.length > 0 ? URL.createObjectURL(images[0]) : "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
         images: images.map(img => URL.createObjectURL(img)),
         video: video ? URL.createObjectURL(video) : undefined,
@@ -88,6 +103,12 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
         createdAt: new Date().toISOString()
       };
 
+      // Store in localStorage for persistence
+      const existingProperties = localStorage.getItem('userProperties');
+      const properties = existingProperties ? JSON.parse(existingProperties) : [];
+      properties.push(mockProperty);
+      localStorage.setItem('userProperties', JSON.stringify(properties));
+
       // Add to the property list immediately
       onSubmit(mockProperty);
       
@@ -99,7 +120,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
       
       onClose();
 
-      // In a real app, you would also send to backend here
       console.log('Property submitted:', mockProperty);
       
     } catch (error) {
