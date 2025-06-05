@@ -1,4 +1,3 @@
-
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? 'https://your-backend-url.com/api' 
   : 'http://localhost:3001/api';
@@ -40,29 +39,8 @@ export const apiService = {
       return await response.json();
     } catch (error) {
       console.error('Error fetching properties:', error);
-      // Return fallback data for now
-      return [
-        {
-          id: 1,
-          title: "Modern Villa in Los Angeles",
-          location: "Los Angeles, CA",
-          area: "Downtown",
-          price: "₹2,800,000",
-          bedrooms: 4,
-          bathrooms: 3,
-          squareFootage: "2,300 sq ft",
-          image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-          images: ["https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"],
-          agent: {
-            name: "Jennifer Barton",
-            image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
-          },
-          featured: true,
-          type: "villa",
-          listingType: "buy" as const,
-          status: "available" as const,
-        }
-      ];
+      // Return empty array since API is not available
+      return [];
     }
   },
 

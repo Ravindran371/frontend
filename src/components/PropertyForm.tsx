@@ -93,7 +93,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
       
       toast({
         title: t('message.propertySubmitted'),
-        description: "Your property has been added successfully!",
+        description: t('message.propertySubmitted'),
         className: "bg-green-500 text-white border-green-500",
       });
       
@@ -143,54 +143,59 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-lg md:text-xl">
-            {type === "sell" ? t('form.sellProperty') : t('form.rentProperty')}
-          </CardTitle>
-          <Button variant="ghost" size="sm" onClick={onClose} className="min-h-[44px] min-w-[44px]">
-            <X className="h-4 w-4" />
-          </Button>
-        </CardHeader>
-        <CardContent>
-          {errors.length > 0 && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-              <ul className="text-red-600 text-sm">
-                {errors.map((error, index) => (
-                  <li key={index}>• {error}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-          
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <PropertyFormFields 
-              formData={formData}
-              onFieldChange={handleFieldChange}
-              type={type}
-            />
-            
-            <FileUploadSection
-              images={images}
-              video={video}
-              onImageUpload={handleImageUpload}
-              onVideoUpload={handleVideoUpload}
-              onRemoveImage={removeImage}
-              onRemoveVideo={removeVideo}
-            />
+    <>
+      {/* Error notifications - positioned at top-left outside form */}
+      {errors.length > 0 && (
+        <div className="fixed top-4 left-4 z-[60] max-w-md">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 shadow-lg">
+            <ul className="text-red-600 text-sm">
+              {errors.map((error, index) => (
+                <li key={index}>• {error}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
 
-            <Button 
-              type="submit" 
-              className="w-full bg-teal-500 hover:bg-teal-600 min-h-[56px] text-lg font-medium"
-              disabled={loading}
-            >
-              {loading ? t('form.submitting') : t('form.submitProperty')}
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-lg md:text-xl">
+              {type === "sell" ? t('form.sellProperty') : t('form.rentProperty')}
+            </CardTitle>
+            <Button variant="ghost" size="sm" onClick={onClose} className="min-h-[44px] min-w-[44px]">
+              <X className="h-4 w-4" />
             </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <PropertyFormFields 
+                formData={formData}
+                onFieldChange={handleFieldChange}
+                type={type}
+              />
+              
+              <FileUploadSection
+                images={images}
+                video={video}
+                onImageUpload={handleImageUpload}
+                onVideoUpload={handleVideoUpload}
+                onRemoveImage={removeImage}
+                onRemoveVideo={removeVideo}
+              />
+
+              <Button 
+                type="submit" 
+                className="w-full bg-teal-500 hover:bg-teal-600 min-h-[56px] text-lg font-medium"
+                disabled={loading}
+              >
+                {loading ? t('form.submitting') : t('form.submitProperty')}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 };
 

@@ -18,6 +18,9 @@ const translations: Translations = {
   'nav.about': { en: 'About', fr: 'À propos' },
   'nav.contact': { en: 'Contact', fr: 'Contact' },
   'nav.signin': { en: 'Sign In', fr: 'Se connecter' },
+  'nav.home': { en: 'Home', fr: 'Accueil' },
+  'nav.properties': { en: 'Properties', fr: 'Propriétés' },
+  'nav.goBack': { en: 'Go Back', fr: 'Retour' },
   
   // Filter Section
   'filter.lookingFor': { en: 'Looking For', fr: 'Recherche' },
@@ -39,6 +42,37 @@ const translations: Translations = {
   'property.apartment': { en: 'Apartment', fr: 'Appartement' },
   'property.villa': { en: 'Villa', fr: 'Villa' },
   'property.plot': { en: 'Plot', fr: 'Terrain' },
+  'property.in': { en: 'in', fr: 'à' },
+  'property.for': { en: 'For', fr: 'Pour' },
+  'property.posted': { en: 'Posted', fr: 'Publié' },
+  'property.recently': { en: 'recently', fr: 'récemment' },
+  'property.liked': { en: 'Liked', fr: 'Aimé' },
+  'property.like': { en: 'Like', fr: 'Aimer' },
+  'property.share': { en: 'Share', fr: 'Partager' },
+  'property.details': { en: 'Property Details', fr: 'Détails de la propriété' },
+  'property.area': { en: 'Area', fr: 'Superficie' },
+  'property.description': { en: 'Description', fr: 'Description' },
+  'property.keyFeatures': { en: 'Key Features', fr: 'Caractéristiques principales' },
+  'property.video': { en: 'Property Video', fr: 'Vidéo de la propriété' },
+  'property.owner': { en: 'Property Owner', fr: 'Propriétaire' },
+  'property.listed': { en: 'Listed', fr: 'Listé' },
+  'property.sendMessage': { en: 'Send Message', fr: 'Envoyer un message' },
+  'property.sendInquiry': { en: 'Send Inquiry', fr: 'Envoyer une demande' },
+  'property.yourName': { en: 'Your Name', fr: 'Votre nom' },
+  'property.yourEmail': { en: 'Your Email', fr: 'Votre email' },
+  'property.yourPhone': { en: 'Your Phone', fr: 'Votre téléphone' },
+  'property.interestedMessage': { en: "I'm interested in this property...", fr: "Je suis intéressé par cette propriété..." },
+  'property.information': { en: 'Property Information', fr: 'Informations sur la propriété' },
+  'property.listingType': { en: 'Listing Type', fr: 'Type d\'annonce' },
+  'property.id': { en: 'Property ID', fr: 'ID de propriété' },
+  'property.status': { en: 'Status', fr: 'Statut' },
+  'property.available': { en: 'Available', fr: 'Disponible' },
+  'property.checkOut': { en: 'Check out this', fr: 'Découvrez cette' },
+  'property.defaultDescription': { en: 'This stunning', fr: 'Cette magnifique' },
+  'property.offersModern': { en: 'offers modern living with excellent amenities. Located in the heart of', fr: 'offre un style de vie moderne avec d\'excellents équipements. Situé au cœur de' },
+  'property.locatedIn': { en: 'it provides easy access to local attractions, shopping centers, schools, and transportation hubs.', fr: 'il offre un accès facile aux attractions locales, centres commerciaux, écoles et centres de transport.' },
+  'property.providesAccess': { en: 'it provides easy access to local attractions', fr: 'il offre un accès facile aux attractions locales' },
+  'property.perfectFor': { en: 'Perfect for families or professionals looking for quality accommodation in a prime location.', fr: 'Parfait pour les familles ou les professionnels recherchant un logement de qualité dans un emplacement de choix.' },
   
   // Property Form
   'form.sellProperty': { en: 'Sell Property', fr: 'Vendre une propriété' },
@@ -66,6 +100,10 @@ const translations: Translations = {
   'form.submitting': { en: 'Submitting...', fr: 'Soumission...' },
   'form.required': { en: 'required', fr: 'requis' },
   'form.number': { en: 'Number', fr: 'Nombre' },
+  'form.description': { en: 'Description', fr: 'Description' },
+  'form.keyFeatures': { en: 'Key Features', fr: 'Caractéristiques principales' },
+  'form.enterDescription': { en: 'Enter property description', fr: 'Entrer la description de la propriété' },
+  'form.enterKeyFeatures': { en: 'Enter key features (comma separated)', fr: 'Entrer les caractéristiques principales (séparées par des virgules)' },
   
   // Search
   'search.lookingFor': { en: 'Looking for', fr: 'Recherche' },
@@ -80,6 +118,10 @@ const translations: Translations = {
   'message.noProperties': { en: 'No properties found', fr: 'Aucune propriété trouvée' },
   'message.adjustFilters': { en: 'Try adjusting your filters to see more results', fr: 'Essayez d\'ajuster vos filtres pour voir plus de résultats' },
   'message.loadingProperties': { en: 'Loading properties...', fr: 'Chargement des propriétés...' },
+  'message.loadingPropertyDetails': { en: 'Loading property details...', fr: 'Chargement des détails de la propriété...' },
+  'message.propertyNotFound': { en: 'Property not found', fr: 'Propriété non trouvée' },
+  'message.shareSuccess': { en: 'Property shared successfully', fr: 'Propriété partagée avec succès' },
+  'message.linkCopied': { en: 'Link copied to clipboard', fr: 'Lien copié dans le presse-papiers' },
   
   // Validation
   'validation.locationRequired': { en: 'Location is required', fr: 'L\'emplacement est requis' },
@@ -93,7 +135,8 @@ const translations: Translations = {
   'validation.maxImages': { en: 'Maximum 7 images allowed', fr: 'Maximum 7 images autorisées' },
   'validation.videoRequired': { en: 'Video is required', fr: 'Une vidéo est requise' },
   'validation.networkError': { en: 'Network error. Please try again.', fr: 'Erreur réseau. Veuillez réessayer.' },
-  'validation.createFailed': { en: 'Failed to create property', fr: 'Échec de la création de propriété' }
+  'validation.createFailed': { en: 'Failed to create property', fr: 'Échec de la création de propriété' },
+  'validation.descriptionRequired': { en: 'Description is required', fr: 'La description est requise' }
 };
 
 interface LanguageContextType {
