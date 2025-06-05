@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Footer from "@/components/Footer";
@@ -109,13 +110,12 @@ const PropertyDetails: React.FC = () => {
   const handleShare = async () => {
     const url = window.location.href;
     const title = `${property?.type} in ${property?.location}`;
-    const text = `${t('property.checkOut')} ${title}`;
     
     if (navigator.share) {
       try {
         await navigator.share({
           title: title,
-          text: text,
+          text: `${t('property.checkOut')} ${title}`,
           url: url,
         });
         toast({
@@ -124,27 +124,32 @@ const PropertyDetails: React.FC = () => {
         });
       } catch (error) {
         console.log('Error sharing:', error);
+        fallbackShare(url);
       }
     } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(url).then(() => {
-        toast({
-          title: t('message.linkCopied'),
-          description: t('message.linkCopied'),
-        });
-      }).catch(() => {
-        const textArea = document.createElement('textarea');
-        textArea.value = url;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        toast({
-          title: t('message.linkCopied'),
-          description: t('message.linkCopied'),
-        });
-      });
+      fallbackShare(url);
     }
+  };
+
+  const fallbackShare = (url: string) => {
+    navigator.clipboard.writeText(url).then(() => {
+      toast({
+        title: t('message.linkCopied'),
+        description: t('message.linkCopied'),
+      });
+    }).catch(() => {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = url;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      toast({
+        title: t('message.linkCopied'),
+        description: t('message.linkCopied'),
+      });
+    });
   };
 
   if (loading) {
@@ -253,23 +258,6 @@ const PropertyDetails: React.FC = () => {
                     </>
                   )}
                 </div>
-              </Card>
-
-              {/* Google Map */}
-              <Card>
-                <CardContent className="p-6">
-                  <h2 className="text-xl font-bold mb-4">{t('property.location')}</h2>
-                  <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      frameBorder="0"
-                      style={{ border: 0 }}
-                      src={`https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${encodeURIComponent(property.area + ', ' + property.location)}`}
-                      allowFullScreen
-                    />
-                  </div>
-                </CardContent>
               </Card>
 
               {/* Property Video */}

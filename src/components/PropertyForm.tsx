@@ -17,7 +17,7 @@ interface PropertyFormProps {
 }
 
 const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) => {
-  const { token, user } = useAuth();
+  const { token } = useAuth();
   const { t } = useLanguage();
   const { validateForm } = usePropertyFormValidation();
   
@@ -78,21 +78,15 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
         images: images.map(img => URL.createObjectURL(img)),
         video: video ? URL.createObjectURL(video) : undefined,
         agent: {
-          name: user?.name || "Property Owner",
+          name: "Property Owner",
           image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
         },
         featured: false,
         type: formData.propertyType,
         listingType: type === "rent-your-property" ? "rent" : "buy" as const,
         status: "available" as const,
-        createdAt: new Date().toISOString(),
-        owner: user?.id
+        createdAt: new Date().toISOString()
       };
-
-      // Store in localStorage for persistence
-      const existingProperties = JSON.parse(localStorage.getItem('userProperties') || '[]');
-      const updatedProperties = [...existingProperties, mockProperty];
-      localStorage.setItem('userProperties', JSON.stringify(updatedProperties));
 
       // Add to the property list immediately
       onSubmit(mockProperty);
