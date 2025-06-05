@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Footer from "@/components/Footer";
@@ -276,6 +275,28 @@ const PropertyDetails: React.FC = () => {
                 </Card>
               )}
 
+              {/* Google Map */}
+              <Card>
+                <CardContent className="p-6">
+                  <h2 className="text-xl font-bold mb-4">Location</h2>
+                  <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
+                    <iframe
+                      src={`https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${encodeURIComponent(property.area + ', ' + property.location)}`}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Property Location"
+                    />
+                  </div>
+                  <p className="text-sm text-gray-600 mt-2">
+                    Replace YOUR_GOOGLE_MAPS_API_KEY with your actual Google Maps API key
+                  </p>
+                </CardContent>
+              </Card>
+
               {/* Property Details */}
               <Card>
                 <CardContent className="p-6">
@@ -336,39 +357,8 @@ const PropertyDetails: React.FC = () => {
               </Card>
             </div>
 
-            {/* Sidebar - Owner Space */}
+            {/* Sidebar - Contact Form */}
             <div className="space-y-6">
-              {/* Owner Info */}
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">{t('property.owner')}</h3>
-                  <div className="flex items-center mb-4">
-                    <img
-                      src={property.agent.image}
-                      alt={property.agent.name}
-                      className="w-16 h-16 rounded-full mr-4 border-2 border-teal-100"
-                    />
-                    <div>
-                      <h4 className="font-semibold text-lg">{property.agent.name}</h4>
-                      <p className="text-sm text-gray-600">{t('property.owner')}</p>
-                      {property.createdAt && (
-                        <div className="flex items-center mt-1 text-xs text-gray-500">
-                          <Calendar className="h-3 w-3 mr-1" />
-                          <span>{t('property.listed')} {formatDate(property.createdAt)}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <Button variant="outline" className="w-full h-12">
-                      <Mail className="h-4 w-4 mr-2" />
-                      {t('property.sendMessage')}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
               {/* Contact Form */}
               <Card>
                 <CardContent className="p-6">

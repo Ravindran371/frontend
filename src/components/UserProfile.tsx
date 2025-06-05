@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, LogOut, Settings, Home } from 'lucide-react';
+import { User, LogOut, Home } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import MyProperties from './MyProperties';
 
 interface UserProfileProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ interface UserProfileProps {
 
 const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth();
+  const [showMyProperties, setShowMyProperties] = useState(false);
 
   if (!isOpen || !user) return null;
 
@@ -19,6 +21,24 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
     logout();
     onClose();
   };
+
+  const handleMyPropertiesClick = () => {
+    setShowMyProperties(true);
+  };
+
+  const handleBackToProfile = () => {
+    setShowMyProperties(false);
+  };
+
+  if (showMyProperties) {
+    return (
+      <MyProperties 
+        isOpen={true} 
+        onClose={onClose} 
+        onBack={handleBackToProfile}
+      />
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -48,13 +68,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
           </div>
 
           <div className="flex flex-col gap-2 pt-4">
-            <Button variant="outline" className="w-full justify-start">
+            <Button variant="outline" className="w-full justify-start" onClick={handleMyPropertiesClick}>
               <Home className="h-4 w-4 mr-2" />
               My Properties
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <Settings className="h-4 w-4 mr-2" />
-              Settings
             </Button>
             <Button 
               variant="outline" 

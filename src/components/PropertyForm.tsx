@@ -17,7 +17,7 @@ interface PropertyFormProps {
 }
 
 const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) => {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const { t } = useLanguage();
   const { validateForm } = usePropertyFormValidation();
   
@@ -78,8 +78,13 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
         images: images.map(img => URL.createObjectURL(img)),
         video: video ? URL.createObjectURL(video) : undefined,
         agent: {
-          name: "Property Owner",
+          name: user?.name || "Property Owner",
           image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+        },
+        owner: {
+          name: user?.name,
+          email: user?.email,
+          phone: user?.phone
         },
         featured: false,
         type: formData.propertyType,
@@ -87,6 +92,12 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, onClose, type }) 
         status: "available" as const,
         createdAt: new Date().toISOString()
       };
+
+      // Store in localStorage
+      const existingProperties = localStorage.getItem('userProperties');
+      const properties = existingProperties ? JSON.parse(existingProperties) : [];
+      properties.push(mockProperty);
+      localStorage.setItem('userProperties', JSON.stringify(properties));
 
       // Add to the property list immediately
       onSubmit(mockProperty);
