@@ -1,143 +1,7 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
-export type Language = 'en' | 'fr';
-
-interface Translations {
-  [key: string]: {
-    en: string;
-    fr: string;
-  };
-}
-
-const translations: Translations = {
-  // Navigation
-  'nav.buy': { en: 'Buy', fr: 'Acheter' },
-  'nav.rent': { en: 'Rent', fr: 'Louer' },
-  'nav.sell': { en: 'Sell', fr: 'Vendre' },
-  'nav.about': { en: 'About', fr: 'À propos' },
-  'nav.contact': { en: 'Contact', fr: 'Contact' },
-  'nav.signin': { en: 'Sign In', fr: 'Se connecter' },
-  'nav.home': { en: 'Home', fr: 'Accueil' },
-  'nav.properties': { en: 'Properties', fr: 'Propriétés' },
-  'nav.goBack': { en: 'Go Back', fr: 'Retour' },
-  
-  // Filter Section
-  'filter.lookingFor': { en: 'Looking For', fr: 'Recherche' },
-  'filter.select': { en: 'Select', fr: 'Sélectionner' },
-  'filter.rent': { en: 'Rent', fr: 'Louer' },
-  'filter.buy': { en: 'Buy', fr: 'Acheter' },
-  'filter.sell': { en: 'Sell', fr: 'Vendre' },
-  'filter.rentYourProperty': { en: 'Rent Your Property', fr: 'Louer votre propriété' },
-  'filter.propertyType': { en: 'Property Type', fr: 'Type de propriété' },
-  'filter.anyType': { en: 'Any type', fr: 'Tout type' },
-  'filter.location': { en: 'Location', fr: 'Emplacement' },
-  'filter.where': { en: 'Where?', fr: 'Où ?' },
-  'filter.budget': { en: 'Budget', fr: 'Budget' },
-  'filter.maxPrice': { en: 'Max price', fr: 'Prix max' },
-  'filter.clear': { en: 'Clear', fr: 'Effacer' },
-  
-  // Property Types
-  'property.house': { en: 'House', fr: 'Maison' },
-  'property.apartment': { en: 'Apartment', fr: 'Appartement' },
-  'property.villa': { en: 'Villa', fr: 'Villa' },
-  'property.plot': { en: 'Plot', fr: 'Terrain' },
-  'property.in': { en: 'in', fr: 'à' },
-  'property.for': { en: 'For', fr: 'Pour' },
-  'property.posted': { en: 'Posted', fr: 'Publié' },
-  'property.recently': { en: 'recently', fr: 'récemment' },
-  'property.liked': { en: 'Liked', fr: 'Aimé' },
-  'property.like': { en: 'Like', fr: 'Aimer' },
-  'property.share': { en: 'Share', fr: 'Partager' },
-  'property.details': { en: 'Property Details', fr: 'Détails de la propriété' },
-  'property.area': { en: 'Area', fr: 'Superficie' },
-  'property.description': { en: 'Description', fr: 'Description' },
-  'property.keyFeatures': { en: 'Key Features', fr: 'Caractéristiques principales' },
-  'property.video': { en: 'Property Video', fr: 'Vidéo de la propriété' },
-  'property.owner': { en: 'Property Owner', fr: 'Propriétaire' },
-  'property.listed': { en: 'Listed', fr: 'Listé' },
-  'property.sendMessage': { en: 'Send Message', fr: 'Envoyer un message' },
-  'property.sendInquiry': { en: 'Send Inquiry', fr: 'Envoyer une demande' },
-  'property.yourName': { en: 'Your Name', fr: 'Votre nom' },
-  'property.yourEmail': { en: 'Your Email', fr: 'Votre email' },
-  'property.yourPhone': { en: 'Your Phone', fr: 'Votre téléphone' },
-  'property.interestedMessage': { en: "I'm interested in this property...", fr: "Je suis intéressé par cette propriété..." },
-  'property.information': { en: 'Property Information', fr: 'Informations sur la propriété' },
-  'property.listingType': { en: 'Listing Type', fr: 'Type d\'annonce' },
-  'property.id': { en: 'Property ID', fr: 'ID de propriété' },
-  'property.status': { en: 'Status', fr: 'Statut' },
-  'property.available': { en: 'Available', fr: 'Disponible' },
-  'property.checkOut': { en: 'Check out this', fr: 'Découvrez cette' },
-  'property.defaultDescription': { en: 'This stunning', fr: 'Cette magnifique' },
-  'property.offersModern': { en: 'offers modern living with excellent amenities. Located in the heart of', fr: 'offre un style de vie moderne avec d\'excellents équipements. Situé au cœur de' },
-  'property.locatedIn': { en: 'it provides easy access to local attractions, shopping centers, schools, and transportation hubs.', fr: 'il offre un accès facile aux attractions locales, centres commerciaux, écoles et centres de transport.' },
-  'property.providesAccess': { en: 'it provides easy access to local attractions', fr: 'il offre un accès facile aux attractions locales' },
-  'property.perfectFor': { en: 'Perfect for families or professionals looking for quality accommodation in a prime location.', fr: 'Parfait pour les familles ou les professionnels recherchant un logement de qualité dans un emplacement de choix.' },
-  
-  // Property Form
-  'form.sellProperty': { en: 'Sell Property', fr: 'Vendre une propriété' },
-  'form.rentProperty': { en: 'Rent Property', fr: 'Louer une propriété' },
-  'form.propertyType': { en: 'Property Type', fr: 'Type de propriété' },
-  'form.selectPropertyType': { en: 'Select property type', fr: 'Sélectionner le type de propriété' },
-  'form.address': { en: 'Address', fr: 'Adresse' },
-  'form.enterAddress': { en: 'Enter full address', fr: 'Entrer l\'adresse complète' },
-  'form.location': { en: 'Location', fr: 'Emplacement' },
-  'form.enterLocation': { en: 'Enter location', fr: 'Entrer l\'emplacement' },
-  'form.bedrooms': { en: 'Bedrooms', fr: 'Chambres' },
-  'form.bathrooms': { en: 'Bathrooms', fr: 'Salles de bain' },
-  'form.price': { en: 'Price', fr: 'Prix' },
-  'form.monthlyRent': { en: 'Monthly rent', fr: 'Loyer mensuel' },
-  'form.sellingPrice': { en: 'Selling price', fr: 'Prix de vente' },
-  'form.squareFootage': { en: 'Square Footage', fr: 'Superficie' },
-  'form.propertyImages': { en: 'Property Images', fr: 'Images de la propriété' },
-  'form.imagesRequired': { en: '(5-7 images required)', fr: '(5-7 images requises)' },
-  'form.uploadImages': { en: 'Upload Images', fr: 'Télécharger des images' },
-  'form.selectImages': { en: 'Select 5-7 images', fr: 'Sélectionner 5-7 images' },
-  'form.propertyVideo': { en: 'Property Video', fr: 'Vidéo de la propriété' },
-  'form.uploadVideo': { en: 'Upload Video', fr: 'Télécharger une vidéo' },
-  'form.selectVideo': { en: 'Select a video file', fr: 'Sélectionner un fichier vidéo' },
-  'form.submitProperty': { en: 'Submit Property', fr: 'Soumettre la propriété' },
-  'form.submitting': { en: 'Submitting...', fr: 'Soumission...' },
-  'form.required': { en: 'required', fr: 'requis' },
-  'form.number': { en: 'Number', fr: 'Nombre' },
-  'form.description': { en: 'Description', fr: 'Description' },
-  'form.keyFeatures': { en: 'Key Features', fr: 'Caractéristiques principales' },
-  'form.enterDescription': { en: 'Enter property description', fr: 'Entrer la description de la propriété' },
-  'form.enterKeyFeatures': { en: 'Enter key features (comma separated)', fr: 'Entrer les caractéristiques principales (séparées par des virgules)' },
-  
-  // Search
-  'search.lookingFor': { en: 'Looking for', fr: 'Recherche' },
-  'search.selectType': { en: 'Select type', fr: 'Sélectionner le type' },
-  'search.cityNeighborhood': { en: 'City, Neighborhood', fr: 'Ville, Quartier' },
-  'search.any': { en: 'Any', fr: 'Tout' },
-  'search.searchProperties': { en: 'Search Properties', fr: 'Rechercher des propriétés' },
-  
-  // Messages
-  'message.propertySubmitted': { en: 'Your property has been submitted successfully.', fr: 'Votre propriété a été soumise avec succès.' },
-  'message.signInRequired': { en: 'Please sign in to add properties', fr: 'Veuillez vous connecter pour ajouter des propriétés' },
-  'message.noProperties': { en: 'No properties found', fr: 'Aucune propriété trouvée' },
-  'message.adjustFilters': { en: 'Try adjusting your filters to see more results', fr: 'Essayez d\'ajuster vos filtres pour voir plus de résultats' },
-  'message.loadingProperties': { en: 'Loading properties...', fr: 'Chargement des propriétés...' },
-  'message.loadingPropertyDetails': { en: 'Loading property details...', fr: 'Chargement des détails de la propriété...' },
-  'message.propertyNotFound': { en: 'Property not found', fr: 'Propriété non trouvée' },
-  'message.shareSuccess': { en: 'Property shared successfully', fr: 'Propriété partagée avec succès' },
-  'message.linkCopied': { en: 'Link copied to clipboard', fr: 'Lien copié dans le presse-papiers' },
-  
-  // Validation
-  'validation.locationRequired': { en: 'Location is required', fr: 'L\'emplacement est requis' },
-  'validation.addressRequired': { en: 'Address is required', fr: 'L\'adresse est requise' },
-  'validation.priceRequired': { en: 'Price is required', fr: 'Le prix est requis' },
-  'validation.propertyTypeRequired': { en: 'Property type is required', fr: 'Le type de propriété est requis' },
-  'validation.bedroomsRequired': { en: 'Bedrooms is required', fr: 'Le nombre de chambres est requis' },
-  'validation.bathroomsRequired': { en: 'Bathrooms is required', fr: 'Le nombre de salles de bain est requis' },
-  'validation.squareFootageRequired': { en: 'Square footage is required', fr: 'La superficie est requise' },
-  'validation.imagesRequired': { en: 'At least 5 images are required', fr: 'Au moins 5 images sont requises' },
-  'validation.maxImages': { en: 'Maximum 7 images allowed', fr: 'Maximum 7 images autorisées' },
-  'validation.videoRequired': { en: 'Video is required', fr: 'Une vidéo est requise' },
-  'validation.networkError': { en: 'Network error. Please try again.', fr: 'Erreur réseau. Veuillez réessayer.' },
-  'validation.createFailed': { en: 'Failed to create property', fr: 'Échec de la création de propriété' },
-  'validation.descriptionRequired': { en: 'Description is required', fr: 'La description est requise' }
-};
+type Language = 'en' | 'fr';
 
 interface LanguageContextType {
   language: Language;
@@ -145,13 +9,294 @@ interface LanguageContextType {
   t: (key: string) => string;
 }
 
+const translations = {
+  en: {
+    // Navigation
+    'nav.home': 'Home',
+    'nav.properties': 'Properties',
+    'nav.about': 'About',
+    'nav.contact': 'Contact',
+    'nav.sell': 'Sell',
+    'nav.signIn': 'Sign In',
+    'nav.language': 'Language',
+    'nav.goBack': 'Go Back',
+
+    // Search
+    'search.placeholder': 'Search properties...',
+    'search.searchButton': 'Search',
+
+    // Filter
+    'filter.buy': 'Buy',
+    'filter.rent': 'Rent',
+    'filter.sell': 'Sell',
+    'filter.propertyType': 'Property Type',
+    'filter.location': 'Location',
+    'filter.priceRange': 'Price Range',
+    'filter.bedrooms': 'Bedrooms',
+    'filter.apply': 'Apply Filters',
+    'filter.clear': 'Clear Filters',
+
+    // Property
+    'property.in': 'in',
+    'property.for': 'For',
+    'property.bedrooms': 'Bedrooms',
+    'property.bathrooms': 'Bathrooms',
+    'property.area': 'Sq Ft',
+    'property.viewDetails': 'View Details',
+    'property.details': 'Property Details',
+    'property.description': 'Description',
+    'property.keyFeatures': 'Key Features',
+    'property.owner': 'Property Owner',
+    'property.sendMessage': 'Send Message',
+    'property.sendInquiry': 'Send Inquiry',
+    'property.yourName': 'Your Name',
+    'property.yourEmail': 'Your Email',
+    'property.yourPhone': 'Your Phone',
+    'property.interestedMessage': 'I am interested in this property...',
+    'property.information': 'Property Information',
+    'property.listingType': 'Listing Type',
+    'property.id': 'Property ID',
+    'property.status': 'Status',
+    'property.available': 'Available',
+    'property.posted': 'Posted',
+    'property.recently': 'Recently',
+    'property.listed': 'Listed',
+    'property.checkOut': 'Check out this',
+    'property.like': 'Like',
+    'property.liked': 'Liked',
+    'property.share': 'Share',
+    'property.video': 'Property Video',
+    'property.location': 'Location',
+    'property.defaultDescription': 'This beautiful',
+    'property.offersModern': 'offers modern living with excellent amenities.',
+    'property.locatedIn': 'Located in',
+    'property.providesAccess': 'it provides easy access to local facilities.',
+    'property.perfectFor': 'Perfect for families and professionals alike.',
+    'property.propertyNotFound': 'Property not found',
+
+    // Form
+    'form.sellProperty': 'Sell Your Property',
+    'form.rentProperty': 'Rent Your Property',
+    'form.propertyType': 'Property Type',
+    'form.address': 'Full Address',
+    'form.location': 'City/Location',
+    'form.bedrooms': 'Bedrooms',
+    'form.bathrooms': 'Bathrooms',
+    'form.price': 'Price (₹)',
+    'form.squareFootage': 'Square Footage',
+    'form.description': 'Property Description',
+    'form.keyFeatures': 'Key Features (comma separated)',
+    'form.images': 'Property Images',
+    'form.video': 'Property Video (Optional)',
+    'form.submitProperty': 'Submit Property',
+    'form.submitting': 'Submitting...',
+    'form.uploadImages': 'Upload Images',
+    'form.uploadVideo': 'Upload Video',
+    'form.removeVideo': 'Remove Video',
+
+    // Profile
+    'profile.userProfile': 'User Profile',
+    'profile.name': 'Name',
+    'profile.email': 'Email',
+    'profile.phone': 'Phone',
+    'profile.myProperties': 'My Properties',
+    'profile.signOut': 'Sign Out',
+    'profile.close': 'Close',
+    'profile.noProperties': 'You haven\'t listed any properties yet.',
+    'profile.delete': 'Delete',
+
+    // Messages
+    'message.propertySubmitted': 'Property submitted successfully!',
+    'message.propertyDeleted': 'Property deleted successfully!',
+    'message.shareSuccess': 'Shared successfully!',
+    'message.linkCopied': 'Link copied to clipboard!',
+    'message.loadingPropertyDetails': 'Loading property details...',
+
+    // Validation
+    'validation.propertyTypeRequired': 'Property type is required',
+    'validation.addressRequired': 'Address is required',
+    'validation.locationRequired': 'Location is required',
+    'validation.priceRequired': 'Price is required',
+    'validation.squareFootageRequired': 'Square footage is required',
+    'validation.bedroomsRequired': 'Number of bedrooms is required',
+    'validation.bathroomsRequired': 'Number of bathrooms is required',
+    'validation.imagesRequired': 'At least one image is required',
+    'validation.networkError': 'Network error. Please try again.',
+
+    // Property Types
+    'propertyType.apartment': 'Apartment',
+    'propertyType.house': 'House',
+    'propertyType.villa': 'Villa',
+    'propertyType.plot': 'Plot',
+    'propertyType.commercial': 'Commercial',
+
+    // Sell Page
+    'sell.title': 'Sell Your Property',
+    'sell.subtitle': 'List your property with us and reach thousands of potential buyers',
+    'sell.sellProperty': 'Sell Property',
+    'sell.rentProperty': 'Rent Your Property',
+    'sell.whySell': 'Why Sell With Us?',
+    'sell.wideReach': 'Wide Reach',
+    'sell.wideReachDesc': 'Get your property in front of thousands of potential buyers',
+    'sell.professionalSupport': 'Professional Support',
+    'sell.professionalSupportDesc': 'Our team of experts will guide you through the entire process',
+    'sell.bestPrice': 'Best Price',
+    'sell.bestPriceDesc': 'We help you get the best possible price for your property',
+    'sell.fastSale': 'Fast Sale',
+    'sell.fastSaleDesc': 'Quick and efficient property selling process',
+  },
+  fr: {
+    // Navigation
+    'nav.home': 'Accueil',
+    'nav.properties': 'Propriétés',
+    'nav.about': 'À propos',
+    'nav.contact': 'Contact',
+    'nav.sell': 'Vendre',
+    'nav.signIn': 'Se connecter',
+    'nav.language': 'Langue',
+    'nav.goBack': 'Retour',
+
+    // Search
+    'search.placeholder': 'Rechercher des propriétés...',
+    'search.searchButton': 'Rechercher',
+
+    // Filter
+    'filter.buy': 'Acheter',
+    'filter.rent': 'Louer',
+    'filter.sell': 'Vendre',
+    'filter.propertyType': 'Type de propriété',
+    'filter.location': 'Localisation',
+    'filter.priceRange': 'Gamme de prix',
+    'filter.bedrooms': 'Chambres',
+    'filter.apply': 'Appliquer les filtres',
+    'filter.clear': 'Effacer les filtres',
+
+    // Property
+    'property.in': 'à',
+    'property.for': 'À',
+    'property.bedrooms': 'Chambres',
+    'property.bathrooms': 'Salles de bain',
+    'property.area': 'Pieds carrés',
+    'property.viewDetails': 'Voir les détails',
+    'property.details': 'Détails de la propriété',
+    'property.description': 'Description',
+    'property.keyFeatures': 'Caractéristiques principales',
+    'property.owner': 'Propriétaire',
+    'property.sendMessage': 'Envoyer un message',
+    'property.sendInquiry': 'Envoyer une demande',
+    'property.yourName': 'Votre nom',
+    'property.yourEmail': 'Votre email',
+    'property.yourPhone': 'Votre téléphone',
+    'property.interestedMessage': 'Je suis intéressé par cette propriété...',
+    'property.information': 'Informations sur la propriété',
+    'property.listingType': 'Type d\'annonce',
+    'property.id': 'ID de la propriété',
+    'property.status': 'Statut',
+    'property.available': 'Disponible',
+    'property.posted': 'Publié',
+    'property.recently': 'Récemment',
+    'property.listed': 'Listé',
+    'property.checkOut': 'Découvrez cette',
+    'property.like': 'J\'aime',
+    'property.liked': 'Aimé',
+    'property.share': 'Partager',
+    'property.video': 'Vidéo de la propriété',
+    'property.location': 'Localisation',
+    'property.defaultDescription': 'Cette belle',
+    'property.offersModern': 'offre un cadre de vie moderne avec d\'excellents équipements.',
+    'property.locatedIn': 'Situé à',
+    'property.providesAccess': 'il offre un accès facile aux installations locales.',
+    'property.perfectFor': 'Parfait pour les familles et les professionnels.',
+    'property.propertyNotFound': 'Propriété non trouvée',
+
+    // Form
+    'form.sellProperty': 'Vendre votre propriété',
+    'form.rentProperty': 'Louer votre propriété',
+    'form.propertyType': 'Type de propriété',
+    'form.address': 'Adresse complète',
+    'form.location': 'Ville/Localisation',
+    'form.bedrooms': 'Chambres',
+    'form.bathrooms': 'Salles de bain',
+    'form.price': 'Prix (₹)',
+    'form.squareFootage': 'Superficie',
+    'form.description': 'Description de la propriété',
+    'form.keyFeatures': 'Caractéristiques principales (séparées par des virgules)',
+    'form.images': 'Images de la propriété',
+    'form.video': 'Vidéo de la propriété (Optionnel)',
+    'form.submitProperty': 'Soumettre la propriété',
+    'form.submitting': 'Soumission...',
+    'form.uploadImages': 'Télécharger des images',
+    'form.uploadVideo': 'Télécharger une vidéo',
+    'form.removeVideo': 'Supprimer la vidéo',
+
+    // Profile
+    'profile.userProfile': 'Profil utilisateur',
+    'profile.name': 'Nom',
+    'profile.email': 'Email',
+    'profile.phone': 'Téléphone',
+    'profile.myProperties': 'Mes propriétés',
+    'profile.signOut': 'Se déconnecter',
+    'profile.close': 'Fermer',
+    'profile.noProperties': 'Vous n\'avez encore répertorié aucune propriété.',
+    'profile.delete': 'Supprimer',
+
+    // Messages
+    'message.propertySubmitted': 'Propriété soumise avec succès!',
+    'message.propertyDeleted': 'Propriété supprimée avec succès!',
+    'message.shareSuccess': 'Partagé avec succès!',
+    'message.linkCopied': 'Lien copié dans le presse-papiers!',
+    'message.loadingPropertyDetails': 'Chargement des détails de la propriété...',
+
+    // Validation
+    'validation.propertyTypeRequired': 'Le type de propriété est requis',
+    'validation.addressRequired': 'L\'adresse est requise',
+    'validation.locationRequired': 'La localisation est requise',
+    'validation.priceRequired': 'Le prix est requis',
+    'validation.squareFootageRequired': 'La superficie est requise',
+    'validation.bedroomsRequired': 'Le nombre de chambres est requis',
+    'validation.bathroomsRequired': 'Le nombre de salles de bain est requis',
+    'validation.imagesRequired': 'Au moins une image est requise',
+    'validation.networkError': 'Erreur réseau. Veuillez réessayer.',
+
+    // Property Types
+    'propertyType.apartment': 'Appartement',
+    'propertyType.house': 'Maison',
+    'propertyType.villa': 'Villa',
+    'propertyType.plot': 'Terrain',
+    'propertyType.commercial': 'Commercial',
+
+    // Sell Page
+    'sell.title': 'Vendez votre propriété',
+    'sell.subtitle': 'Répertoriez votre propriété avec nous et atteignez des milliers d\'acheteurs potentiels',
+    'sell.sellProperty': 'Vendre une propriété',
+    'sell.rentProperty': 'Louer votre propriété',
+    'sell.whySell': 'Pourquoi vendre avec nous?',
+    'sell.wideReach': 'Large portée',
+    'sell.wideReachDesc': 'Mettez votre propriété devant des milliers d\'acheteurs potentiels',
+    'sell.professionalSupport': 'Support professionnel',
+    'sell.professionalSupportDesc': 'Notre équipe d\'experts vous guidera tout au long du processus',
+    'sell.bestPrice': 'Meilleur prix',
+    'sell.bestPriceDesc': 'Nous vous aidons à obtenir le meilleur prix possible pour votre propriété',
+    'sell.fastSale': 'Vente rapide',
+    'sell.fastSaleDesc': 'Processus de vente de propriété rapide et efficace',
+  }
+};
+
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
+  if (!context) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+};
+
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<Language>('en');
 
   const t = (key: string): string => {
-    return translations[key]?.[language] || key;
+    return translations[language][key as keyof typeof translations['en']] || key;
   };
 
   return (
@@ -159,12 +304,4 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       {children}
     </LanguageContext.Provider>
   );
-};
-
-export const useLanguage = () => {
-  const context = useContext(LanguageContext);
-  if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
 };
