@@ -35,17 +35,12 @@ const PropertyDetails: React.FC = () => {
     const fetchProperty = async () => {
       if (id) {
         try {
-          // First try to get from API
-          let propertyData = await apiService.getPropertyById(id);
-          
-          // If not found in API, check localStorage
-          if (!propertyData) {
-            const storedProperties = localStorage.getItem('userProperties');
-            const userProperties = storedProperties ? JSON.parse(storedProperties) : [];
-            propertyData = userProperties.find((p: Property) => 
-              p.id?.toString() === id || p._id?.toString() === id
-            );
-          }
+          // Check localStorage for user properties
+          const storedProperties = localStorage.getItem('userProperties');
+          const userProperties = storedProperties ? JSON.parse(storedProperties) : [];
+          const propertyData = userProperties.find((p: Property) => 
+            p.id?.toString() === id || p._id?.toString() === id
+          );
           
           if (propertyData) {
             setProperty(propertyData);
@@ -55,15 +50,6 @@ const PropertyDetails: React.FC = () => {
           }
         } catch (error) {
           console.error('Error fetching property:', error);
-          // Fallback to localStorage only
-          const storedProperties = localStorage.getItem('userProperties');
-          const userProperties = storedProperties ? JSON.parse(storedProperties) : [];
-          const propertyData = userProperties.find((p: Property) => 
-            p.id?.toString() === id || p._id?.toString() === id
-          );
-          if (propertyData) {
-            setProperty(propertyData);
-          }
         }
       }
       setLoading(false);
@@ -281,7 +267,7 @@ const PropertyDetails: React.FC = () => {
                   <h2 className="text-xl font-bold mb-4">Location</h2>
                   <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
                     <iframe
-                      src={`https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${encodeURIComponent(property.area + ', ' + property.location)}`}
+                      src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyDBSnInLXCytbXN3ivCQ9Yhbc7nsLMuwFs&q=${encodeURIComponent(property.area + ', ' + property.location)}`}
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}
@@ -291,9 +277,6 @@ const PropertyDetails: React.FC = () => {
                       title="Property Location"
                     />
                   </div>
-                  <p className="text-sm text-gray-600 mt-2">
-                    Replace YOUR_GOOGLE_MAPS_API_KEY with your actual Google Maps API key
-                  </p>
                 </CardContent>
               </Card>
 

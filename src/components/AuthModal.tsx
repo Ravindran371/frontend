@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { X } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import CountrySelector from './CountrySelector';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -18,7 +19,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
     name: '',
     email: '',
     password: '',
-    phone: ''
+    phone: '',
+    country: '',
+    countryCode: ''
   });
   const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -41,7 +44,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
 
       if (success) {
         onClose();
-        setFormData({ name: '', email: '', password: '', phone: '' });
+        setFormData({ name: '', email: '', password: '', phone: '', country: '', countryCode: '' });
       } else {
         setErrors(['Invalid credentials or user already exists']);
       }
@@ -57,9 +60,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
     setErrors([]);
   };
 
+  const handleCountryChange = (country: any) => {
+    setFormData(prev => ({ 
+      ...prev, 
+      country: country.code,
+      countryCode: country.dialCode
+    }));
+    setErrors([]);
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md max-h-[90vh] overflow-y-auto">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>
             {currentMode === 'login' ? 'Sign In' : 'Sign Up'}
@@ -96,13 +108,30 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
 
                 <div>
                   <label className="block text-sm font-medium mb-1">
+                    Country <span className="text-red-500">*</span>
+                  </label>
+                  <CountrySelector
+                    value={formData.country}
+                    onChange={handleCountryChange}
+                    placeholder="Select your country"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">
                     Phone Number
                   </label>
-                  <Input
-                    value={formData.phone}
-                    onChange={(e) => handleChange('phone', e.target.value)}
-                    placeholder="Enter your phone number"
-                  />
+                  <div className="flex">
+                    <div className="flex items-center px-3 bg-gray-50 border border-r-0 border-gray-300 rounded-l-md text-sm text-gray-600">
+                      {formData.countryCode || '+1'}
+                    </div>
+                    <Input
+                      value={formData.phone}
+                      onChange={(e) => handleChange('phone', e.target.value)}
+                      placeholder="Enter your phone number"
+                      className="rounded-l-none"
+                    />
+                  </div>
                 </div>
               </>
             )}
