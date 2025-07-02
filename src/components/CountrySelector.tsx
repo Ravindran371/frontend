@@ -69,7 +69,7 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ value, onChange, placeh
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
+      <PopoverContent className="w-[400px] p-0 bg-white border shadow-lg z-50">
         <Command>
           <CommandInput placeholder="Search country..." />
           <CommandEmpty>No country found.</CommandEmpty>
@@ -81,6 +81,7 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ value, onChange, placeh
                   onChange(country);
                   setOpen(false);
                 }}
+                className="cursor-pointer"
               >
                 <Check
                   className={cn(

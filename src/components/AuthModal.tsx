@@ -34,6 +34,22 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
     setLoading(true);
     setErrors([]);
 
+    // Validation for register mode
+    if (currentMode === 'register') {
+      const newErrors = [];
+      if (!formData.country) {
+        newErrors.push('Please select a country');
+      }
+      if (!formData.phone.trim()) {
+        newErrors.push('Phone number is required');
+      }
+      if (newErrors.length > 0) {
+        setErrors(newErrors);
+        setLoading(false);
+        return;
+      }
+    }
+
     try {
       let success = false;
       if (currentMode === 'login') {
@@ -119,13 +135,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
 
                 <div>
                   <label className="block text-sm font-medium mb-1">
-                    Phone Number
+                    Phone Number <span className="text-red-500">*</span>
                   </label>
                   <div className="flex">
                     <div className="flex items-center px-3 bg-gray-50 border border-r-0 border-gray-300 rounded-l-md text-sm text-gray-600">
                       {formData.countryCode || '+1'}
                     </div>
                     <Input
+                      required
                       value={formData.phone}
                       onChange={(e) => handleChange('phone', e.target.value)}
                       placeholder="Enter your phone number"
