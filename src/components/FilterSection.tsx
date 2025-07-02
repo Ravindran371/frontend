@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -131,8 +130,8 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFi
           >
             {t('filter.clear')}
           </Button>
-          <Button className="bg-teal-500 hover:bg-teal-600 text-white rounded-full p-4 min-h-[44px] min-w-[44px]">
-            <Search className="h-5 w-5" />
+          <Button className="bg-teal-500 hover:bg-teal-600 text-white rounded-full px-6 min-h-[44px]">
+            Search
           </Button>
         </div>
       </div>
