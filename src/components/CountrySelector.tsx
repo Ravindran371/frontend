@@ -55,21 +55,20 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ value, onChange, placeh
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between h-10"
+          className="w-[120px] justify-between h-12 border-gray-300"
         >
           {selectedCountry ? (
             <div className="flex items-center">
-              <span className="mr-2 text-lg">{selectedCountry.flag}</span>
-              <span>{selectedCountry.name}</span>
-              <span className="ml-auto text-gray-500">{selectedCountry.dialCode}</span>
+              <span className="text-lg">{selectedCountry.flag}</span>
+              <span className="ml-1 text-sm">{selectedCountry.dialCode}</span>
             </div>
           ) : (
-            placeholder
+            <span className="text-sm">🇮🇳 +91</span>
           )}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[400px] p-0 bg-white border shadow-lg z-50">
+      <PopoverContent className="w-[300px] p-0 bg-white border shadow-lg z-50">
         <Command>
           <CommandInput placeholder="Search country..." />
           <CommandEmpty>No country found.</CommandEmpty>
@@ -77,6 +76,7 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ value, onChange, placeh
             {countries.map((country) => (
               <CommandItem
                 key={country.code}
+                value={country.name}
                 onSelect={() => {
                   onChange(country);
                   setOpen(false);
