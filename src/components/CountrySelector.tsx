@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
 import { Check, ChevronDown } from 'lucide-react';
@@ -48,6 +47,11 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ value, onChange, placeh
   
   const selectedCountry = countries.find(country => country.code === value);
 
+  const handleSelect = (country: Country) => {
+    onChange(country);
+    setOpen(false);
+  };
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -76,11 +80,7 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ value, onChange, placeh
             {countries.map((country) => (
               <CommandItem
                 key={country.code}
-                value={country.name}
-                onSelect={() => {
-                  onChange(country);
-                  setOpen(false);
-                }}
+                onSelect={() => handleSelect(country)}
                 className="cursor-pointer"
               >
                 <Check

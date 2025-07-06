@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import PropertyForm from "./PropertyForm";
 
 interface FilterSectionProps {
@@ -28,6 +29,7 @@ export interface FilterState {
 
 const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFilters, onSellRentSubmit }) => {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const [filters, setFilters] = useState<FilterState>({
     lookingFor: "",
     propertyType: "",
@@ -42,6 +44,14 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFi
     setFilters(newFilters);
     
     if (key === "lookingFor" && (value === "sell" || value === "rent-your-property")) {
+      // Check if user is an agent
+      if (!user) {
+        alert('Please sign in first');
+        return;
+      }
+      
+      // Only agents can upload properties (assuming we store role in user context)
+      // For now, we'll allow any logged-in user to upload
       setPropertyFormType(value);
       setShowPropertyForm(true);
       onSellRentSubmit(value);
@@ -85,8 +95,12 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange, onClearFi
                 <SelectContent>
                   <SelectItem value="rent">{t('filter.rent')}</SelectItem>
                   <SelectItem value="buy">{t('filter.buy')}</SelectItem>
-                  <SelectItem value="sell">{t('filter.sell')}</SelectItem>
-                  <SelectItem value="rent-your-property">{t('filter.rentYourProperty')}</SelectItem>
+                  {user && (
+                    <>
+                      <SelectItem value="sell">{t('filter.sell')}</SelectItem>
+                      <SelectItem value="rent-your-property">{t('filter.rentYourProperty')}</SelectItem>
+                    </>
+                  )}
                 </SelectContent>
               </Select>
             </div>

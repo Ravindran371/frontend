@@ -22,15 +22,15 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
     password: '',
     confirmPassword: '',
     phone: '',
-    country: '',
-    countryCode: '',
+    country: 'IN',
+    countryCode: '+91',
     role: ''
   });
   const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { login, register } = useAuth();
+  const { login, register, logout } = useAuth();
 
   if (!isOpen) return null;
 
@@ -68,6 +68,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
         setLoading(false);
         return;
       }
+    } else {
+      // Login validation
+      if (!formData.email.trim()) {
+        setErrors(['Email is required']);
+        setLoading(false);
+        return;
+      }
+      if (!formData.password.trim()) {
+        setErrors(['Password is required']);
+        setLoading(false);
+        return;
+      }
     }
 
     try {
@@ -80,7 +92,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
 
       if (success) {
         onClose();
-        setFormData({ name: '', email: '', password: '', confirmPassword: '', phone: '', country: '', countryCode: '', role: '' });
+        setFormData({ name: '', email: '', password: '', confirmPassword: '', phone: '', country: 'IN', countryCode: '+91', role: '' });
       } else {
         setErrors(['Invalid credentials or user already exists']);
       }
@@ -103,6 +115,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
       countryCode: country.dialCode
     }));
     setErrors([]);
+  };
+
+  const handleLogout = () => {
+    logout();
+    onClose();
   };
 
   return (
@@ -174,7 +191,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
                     <SelectContent>
                       <SelectItem value="user">User</SelectItem>
                       <SelectItem value="agent">Agent</SelectItem>
-                      <SelectItem value="owner">Property Owner</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -292,17 +308,27 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
             </Button>
           </div>
 
-          <div className="text-center">
+          <div className="text-center space-y-2">
             <Button
               variant="link"
               onClick={() => setCurrentMode(currentMode === 'login' ? 'register' : 'login')}
               className="text-teal-600 h-auto p-0"
             >
               {currentMode === 'login' 
-                ? "Already have an account? Sign in" 
+                ? "Don't have an account? Sign up" 
                 : 'Already have an account? Sign in'
               }
             </Button>
+            
+            <div>
+              <Button
+                variant="link"
+                onClick={handleLogout}
+                className="text-red-600 h-auto p-0 text-sm"
+              >
+                Logout
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
