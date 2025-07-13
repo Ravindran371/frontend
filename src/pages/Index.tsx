@@ -12,16 +12,12 @@ const Index: React.FC = () => {
   const { t } = useLanguage();
   const [properties, setProperties] = useState<Property[]>([]);
 
-  const loadProperties = () => {
+  useEffect(() => {
     // Load properties from localStorage
     const storedProperties = localStorage.getItem('userProperties');
     if (storedProperties) {
       setProperties(JSON.parse(storedProperties));
     }
-  };
-
-  useEffect(() => {
-    loadProperties();
   }, []);
 
   const handleFilterChange = (filters: FilterState) => {
@@ -39,11 +35,6 @@ const Index: React.FC = () => {
       return;
     }
     console.log('Sell/Rent action:', type);
-  };
-
-  const handlePropertySubmitted = (newProperty: Property) => {
-    // Refresh the properties list when a new property is submitted
-    setProperties(prev => [...prev, newProperty]);
   };
 
   const handlePropertyDelete = (propertyId: string | number) => {
@@ -67,7 +58,6 @@ const Index: React.FC = () => {
           onFilterChange={handleFilterChange}
           onClearFilters={handleClearFilters}
           onSellRentSubmit={handleSellRentSubmit}
-          onPropertySubmitted={handlePropertySubmitted}
         />
 
         {/* Properties Grid */}
